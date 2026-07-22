@@ -62,14 +62,19 @@
 					Draft with AI
 					<span class="htmx-indicator loading loading-spinner loading-xs"></span>
 				</button>
-				<details class="text-xs">
-					<summary class="cursor-pointer text-base-content/50">History</summary>
-					<div hx-get="/translations/keys/{{ k.key_id }}/{{ code }}/history"
-						hx-trigger="toggle once" hx-swap="innerHTML"
-						class="mt-1"></div>
-				</details>
 			</div>
 		</div>
+		<details class="text-xs ml-[76px] mt-2">
+			<summary class="cursor-pointer text-base-content/50">History</summary>
+			{# The native "toggle" event fires on <details> itself and doesn't
+			   bubble, so a plain hx-trigger="toggle once" on this child <div>
+			   never actually receives it — "from:closest details" attaches
+			   the listener to the ancestor instead, while this div stays the
+			   swap target. #}
+			<div hx-get="/translations/keys/{{ k.key_id }}/{{ code }}/history"
+				hx-trigger="toggle once from:closest details" hx-swap="innerHTML"
+				class="mt-1"></div>
+		</details>
 	</div>
 	{% endfor %}
 	{% endif %}

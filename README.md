@@ -29,12 +29,71 @@ errors):
   (idempotent upsert, same as the original's `import_page.py`).
 
 **Not done yet, deliberately deferred:**
-- **Auth.** `app/auth.py` is a mock-user stub (`AUTH_MODE=mock`). Real auth
-  (Supabase Auth is the leading candidate, since the DB is already on
-  Supabase) is a separate decision, independent of everything above.
+- **Auth + roles.** `app/auth.py` is still a mock-user stub (`AUTH_MODE=mock`).
+  Full design decided, not yet built — see below.
 - **Deployment.** Nothing here is deployed anywhere yet. Candidates
   discussed: Render (free tier, but cold-starts after inactivity) or
-  Railway (no cold start, but no real long-term free tier).
+  Railway (no cold start, but no real long-term free tier). Decided this
+  isn't urgent — the original `netlify-localization` app is already live
+  and already covers the actual near-term need (Birthe reviewing/approving
+  translations online), so this project stays local-only until the auth
+  work below is done and there's a real reason to put it somewhere.
+
+### Auth + roles plan (decided, not yet implemented)
+
+Users: you (admin) + Birthe (editor) + up to ~2 more reviewers (approver).
+Small, fixed, known set — no self-service signup/password-reset needed, so
+deliberately NOT using Flask-Security-Too (its whole value is self-service
+user lifecycle at scale, and it requires an ORM — this app has none, using
+raw `psycopg2` everywhere; adopting it means a second data-access pattern
+for a feature this app's actual scale doesn't need). Also deliberately NOT
+using the full `supabase` pip package (pulls in Realtime/Storage/PostgREST/
+Functions clients this app will never touch) or keeping a live Supabase
+session going per-request (no RLS/PostgREST usage here to justify it).
+
+**Architecture:**
+- Supabase Auth's role is narrow: verify email+password ONCE at login, via
+  the lean `supabase-auth` package (not the full `supabase` bundle).
+- After that one verification, Flask's own signed session cookie
+  (`flask.session`, needs `SECRET_KEY`) is the only thing checked on every
+  subsequent request — no ongoing JWT verification, no refresh-token dance.
+- Roles live in a `profiles` table in the same Postgres DB:
+  `id uuid references auth.users(id)`, `email`, `role check (role in
+  ('admin','editor','approver'))`. Populated by hand for the ~4 known
+  users via the Supabase dashboard — no signup flow.
+
+**Permission matrix:**
+
+| Action | admin | editor (Birthe) | approver (other reviewers) |
+|---|---|---|---|
+| Edit translation text | ✅ | ✅ | ❌ read-only |
+| Approve / unapprove | ✅ | ✅ | ✅ |
+| Draft with AI (single + bulk) | ✅ | ✅ | ❌ |
+| Skip toggle | ✅ | ✅ | ❌ |
+| Delete key | ✅ | ❌ | ❌ |
+| Glossary / Style guide edit | ✅ | ✅ | ❌ (tab not shown) |
+| Import tab | ✅ | ❌ (not shown) | ❌ (not shown) |
+| CSV export / twig export | ✅ | ✅ | ✅ (read-only, no reason to block) |
+| CSV import (writes drafts) | ✅ | ✅ | ❌ |
+| Mark complete / Reopen | ✅ | ✅ | ❌ |
+| Publish toggle (marks live on the real site) | ✅ | ❌ | ❌ |
+
+**To build, when picked back up:**
+- `app/auth.py`: real session-reading `require_user()` + a `require_role()`
+  helper; keep `AUTH_MODE=mock` working for local dev.
+- New: `app/routes/ui_auth.py` (`/login`, `/logout`), a plain `login.html`,
+  the `profiles` table migration.
+- A single `before_request` hook redirecting unauthenticated visits to
+  `/login` (normal redirect for full page loads, `HX-Redirect` header for
+  htmx fragment requests) — also a chance to replace the ~30 routes'
+  repeated `if not require_user(request): return "Unauthorized", 401` with
+  one central check.
+- New env vars: `SECRET_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`.
+- Replace the `translation_keys.py` DELETE route's `APP_ENV != "production"`
+  placeholder gate with a real `role == "admin"` check.
+- Hide Import/Glossary/Style guide nav tabs per the matrix above; make
+  translation textareas read-only and hide Draft/Skip/Delete controls for
+  the approver role.
 
 ## Local dev
 
