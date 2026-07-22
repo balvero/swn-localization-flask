@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="shopwired" class="bg-base-200 min-h-screen">
+<head>
+<meta charset="UTF-8" />
+<title>ShopWired Nordic — Localization tool</title>
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+<style>
+	[data-theme="shopwired"] {
+		color-scheme: light;
+		--color-base-100: #ffffff;
+		--color-base-200: #f6f6f6;
+		--color-base-300: #e5e7eb;
+		--color-base-content: #111827;
+		--color-primary: #0e9f6e;
+		--color-primary-content: #ffffff;
+		--color-secondary: #0e9f6e;
+		--color-secondary-content: #ffffff;
+		--color-accent: #0e9f6e;
+		--color-accent-content: #ffffff;
+		--color-success: #0e9f6e;
+		--color-success-content: #ffffff;
+		--color-warning: #f0923d;
+		--color-warning-content: #ffffff;
+		--color-error: #ef4444;
+		--color-error-content: #ffffff;
+		--color-neutral: #1a1a1a;
+		--color-neutral-content: #f4f5f6;
+		--radius-box: 1rem;
+		--radius-field: 0.75rem;
+		--radius-selector: 999px;
+	}
+</style>
+</head>
+<body class="bg-base-200 min-h-screen m-0" hx-boost="true">
+<div class="max-w-7xl mx-auto my-6">
+	<div class="bg-base-100 border border-base-200 overflow-hidden shadow-sm rounded-2xl" id="app-shell">
+		{# hx-target/hx-select/hx-swap are scoped to JUST this tablist (and
+		   _page_list.html's root, the other real navigation surface) —
+		   deliberately NOT on <body>. Those three attributes inherit down
+		   to every htmx-triggered element, not just boosted links; putting
+		   them on <body> once broke the Skip checkbox (its response is a
+		   bare key-card fragment with no #app-shell in it, so an inherited
+		   hx-select="#app-shell" found nothing and swapped in emptiness —
+		   the card visibly "disappeared"). Scoped to only where boosted
+		   navigation links actually live, this can't leak into unrelated
+		   fragment-returning actions elsewhere on the page. #}
+		<div role="tablist" class="flex gap-1 bg-neutral px-3 py-3 items-center"
+			hx-target="#app-shell" hx-select="#app-shell" hx-swap="innerHTML show:none">
+			{% set tabs = [
+				("translations", "/translations", "Translations"),
+				("completed", "/completed", "Completed"),
+				("import", "/import", "Import"),
+				("glossary", "/glossary", "Glossary"),
+				("style", "/style-guide", "Style guide"),
+			] %}
+			{% for id, href, label in tabs %}
+			<a href="{{ href }}"
+			   class="px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer no-underline {{ 'bg-neutral-content/10 text-neutral-content' if active_tab == id else 'text-neutral-content/70 hover:text-neutral-content/80 hover:bg-neutral-content/10' }}">
+				{{ label }}
+			</a>
+			{% endfor %}
+		</div>
+		<div id="main-content">
+			{% block content %}{% endblock %}
+		</div>
+	</div>
+</div>
+<script>
+	// Small "Saved"/error toasts driven by an HX-Trigger response header
+	// (see app/routes/ui_translations.py's save routes) instead of a full
+	// row re-render, so typing isn't disrupted mid-edit.
+	document.body.addEventListener("toast", function (evt) {
+		const el = document.createElement("div");
+		el.className = "toast toast-top toast-end z-50";
+		const kind = evt.detail.error ? "alert-error" : "alert-success";
+		el.innerHTML = '<div class="alert ' + kind + ' text-sm">' + evt.detail.message + '</div>';
+		document.body.appendChild(el);
+		setTimeout(() => el.remove(), 2000);
+	});
+</script>
+</body>
+</html>

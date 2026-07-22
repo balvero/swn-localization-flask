@@ -1,0 +1,76 @@
+{# One translation key's card. Included in _translations_panel.html and
+   also returned standalone (outerHTML swap) after skip/delete/approve/
+   draft actions, so it's always self-contained — everything it needs
+   (k, LANGS, is_dev) is passed explicitly, no reliance on outer scope. #}
+<div id="key-{{ k.key_id }}" class="key-card mb-4 p-4 bg-base-100 border border-base-300 rounded-2xl shadow-sm">
+	<div class="flex items-start justify-between gap-3 mb-1.5">
+		<div class="text-xs font-mono text-base-content/40">{{ k.full_key }}</div>
+		<div class="flex items-center gap-3 shrink-0">
+			<label class="flex items-center gap-1.5 text-xs text-base-content/60 cursor-pointer">
+				<input type="checkbox" class="checkbox checkbox-xs"
+					{% if k.skip %}checked{% endif %}
+					hx-put="/translations/keys/{{ k.key_id }}/skip"
+					hx-vals='{"skip": {{ "false" if k.skip else "true" }} }'
+					hx-target="#key-{{ k.key_id }}" hx-swap="outerHTML" />
+				Skip (not real content)
+			</label>
+			{% if is_dev %}
+			<button class="text-xs text-error/70 hover:text-error"
+				title="Permanently delete this key and its translations (dev only)"
+				hx-delete="/translations/keys/{{ k.key_id }}"
+				hx-confirm='Delete "{{ k.full_key }}" and its translations? This can&#39;t be undone.'
+				hx-target="#key-{{ k.key_id }}" hx-swap="outerHTML">
+				Delete
+			</button>
+			{% endif %}
+		</div>
+	</div>
+	<div class="bg-base-200 rounded-lg px-3 py-2 text-sm mb-3">{{ k.en }}</div>
+
+	{% if k.skip %}
+	<div class="text-xs text-base-content/50 italic">
+		Skipped — every language uses the English text above on export, hidden from "Draft all with AI".
+	</div>
+	{% else %}
+	{% for code, label in LANGS %}
+	{% set t = k.translations.get(code, {"text": "", "status": "draft"}) %}
+	<div class="rounded-xl p-3 mb-2 {{ 'bg-emerald-50/50' if t.status == 'approved' else 'bg-orange-50/50' }}">
+		<div class="flex gap-3 items-start">
+			<div class="w-16 text-xs text-base-content/60 pt-2 shrink-0">{{ label }}</div>
+			<textarea
+				class="textarea textarea-bordered bg-base-100 flex-1 text-sm field-sizing-content min-h-[100px] resize-none"
+				name="text"
+				hx-put="/translations/keys/{{ k.key_id }}/{{ code }}/save"
+				hx-trigger="keyup changed delay:600ms"
+				hx-swap="none"
+				hx-vals='js:{status: "{{ t.status }}"}'
+				placeholder="No translation yet">{{ t.text }}</textarea>
+			<div class="flex flex-col gap-1.5 w-32 shrink-0">
+				<span class="badge {{ 'badge-success' if t.status == 'approved' else 'badge-warning' }} badge-sm gap-1">
+					{{ "Approved" if t.status == "approved" else "Draft" }}
+				</span>
+				<button class="btn btn-xs btn-outline"
+					hx-put="/translations/keys/{{ k.key_id }}/{{ code }}/approve"
+					hx-vals='{"approve": {{ "false" if t.status == "approved" else "true" }} }'
+					hx-target="#key-{{ k.key_id }}" hx-swap="outerHTML">
+					{{ "Unapprove" if t.status == "approved" else "Approve" }}
+				</button>
+				<button class="btn btn-xs btn-outline gap-1"
+					hx-post="/translations/keys/{{ k.key_id }}/{{ code }}/draft"
+					hx-target="#key-{{ k.key_id }}" hx-swap="outerHTML"
+					hx-disabled-elt="this">
+					Draft with AI
+					<span class="htmx-indicator loading loading-spinner loading-xs"></span>
+				</button>
+				<details class="text-xs">
+					<summary class="cursor-pointer text-base-content/50">History</summary>
+					<div hx-get="/translations/keys/{{ k.key_id }}/{{ code }}/history"
+						hx-trigger="toggle once" hx-swap="innerHTML"
+						class="mt-1"></div>
+				</details>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+	{% endif %}
+</div>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-5">
+	<div class="flex justify-between items-center mb-4">
+		<div>
+			<div class="font-semibold text-base">Glossary</div>
+			<div class="text-xs text-base-content/50">Terms that must always translate the same way</div>
+		</div>
+		<button class="btn btn-primary btn-sm"
+			hx-post="/glossary" hx-target="#glossary-tbody" hx-swap="beforeend">+ Add term</button>
+	</div>
+	<div class="overflow-x-auto">
+		<table class="table table-sm">
+			<thead><tr><th>English</th><th>Dansk</th><th>Svenska</th><th>Norsk</th><th>Notes</th><th></th></tr></thead>
+			<tbody id="glossary-tbody">
+				{% for t in terms %}
+					{% include "_glossary_row.html" %}
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{# Standalone #main-content refresh — used only when a key-level action
+   (approve/unapprove so far) makes the page currently being viewed cross
+   the completion boundary, so it no longer belongs on the tab the user is
+   looking at. The sidebar entry for it would vanish on its own via the
+   normal OOB refresh, but the panel would otherwise keep showing that
+   now-out-of-place page's content. See ui_translations.py's
+   _redirect_if_left_tab — the response's HX-Retarget/HX-Reswap headers
+   send this here instead of wherever the triggering button's own
+   hx-target pointed (a single key card), auto-selecting whichever page is
+   now first for this tab (or the empty state if none are left). #}
+<div id="main-content">
+	<div class="flex min-h-[500px]">
+		{% include "_page_list.html" %}
+		{% include "_translations_panel.html" %}
+	</div>
+</div>

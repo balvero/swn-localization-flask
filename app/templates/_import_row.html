@@ -1,0 +1,5 @@
+<tr>
+	<td><input class="input input-bordered input-sm w-full font-mono text-xs" name="keys[]" value="{{ key or 'section.new_key' }}"></td>
+	<td><input class="input input-bordered input-sm w-full" name="texts[]" value="{{ text or '' }}"></td>
+	<td><button type="button" class="btn btn-ghost btn-xs text-error" hx-on:click="this.closest('tr').remove()">Delete</button></td>
+</tr>

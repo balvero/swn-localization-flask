@@ -1,0 +1,61 @@
+{# Step 1: paste raw source, extract. result is None on first load. #}
+<div class="font-semibold text-base mb-1">Import a new page</div>
+<div class="text-xs text-base-content/50 mb-1">
+	Paste the real .twig/HTML source below. Extraction still needs a manual pass —
+	check section names and remove anything that shouldn't be translated before importing.
+</div>
+
+{% if result %}
+<div class="alert alert-success mb-4 text-sm">
+	Imported '{{ result.slug }}' into <strong>{{ "PRODUCTION" if result.target == "production" else "local" }}</strong>:
+	{{ result.new_keys }} new key(s), {{ result.updated_keys }} existing key(s) updated.
+</div>
+{% endif %}
+{% if error %}
+<div class="alert alert-error mb-4 text-sm">{{ error }}</div>
+{% endif %}
+
+{% if not review %}
+<form hx-post="/import/extract" hx-target="#import-body" hx-swap="innerHTML">
+	<textarea name="raw_content" class="textarea textarea-bordered w-full font-mono text-xs mb-3" rows="14"
+		placeholder="Paste raw .twig source here…">{{ raw_content or "" }}</textarea>
+	<button type="submit" class="btn btn-primary">Extract</button>
+</form>
+{% else %}
+<form action="/import/commit" method="post">
+	<input type="hidden" name="template" value="{{ review.template }}">
+	<div class="flex gap-3 mb-4">
+		<div class="flex-1">
+			<div class="text-xs text-base-content/60 mb-1">Slug</div>
+			<input class="input input-bordered w-full" name="slug" placeholder="e.g. features" required>
+		</div>
+		<div class="flex-[2]">
+			<div class="text-xs text-base-content/60 mb-1">Label</div>
+			<input class="input input-bordered w-full" name="label" placeholder="e.g. Features page" required>
+		</div>
+	</div>
+	<div class="flex justify-between items-center mb-2">
+		<div class="text-sm font-semibold">{{ review["keys"]|length }} extracted key(s) — review before importing</div>
+		<button type="button" class="btn btn-ghost btn-sm"
+			hx-post="/import/add-row" hx-target="#import-rows" hx-swap="beforeend">+ Add key</button>
+	</div>
+	<div class="overflow-x-auto mb-4">
+		<table class="table table-sm">
+			<thead><tr><th class="w-[30%]">Key (section.field)</th><th>English text</th><th></th></tr></thead>
+			<tbody id="import-rows">
+				{% for key, text in review["keys"].items() %}
+					{% include "_import_row.html" %}
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<details class="mb-4">
+		<summary class="cursor-pointer btn btn-ghost btn-sm">Show extracted skeleton (sanity check)</summary>
+		<pre class="bg-base-200 border border-base-300 rounded-lg p-3 text-xs max-h-72 overflow-auto mt-2">{{ review.template }}</pre>
+	</details>
+	<div class="flex gap-3">
+		<button type="submit" class="btn btn-primary">Import into database</button>
+		<a href="/import" class="btn btn-ghost">Start over</a>
+	</div>
+</form>
+{% endif %}

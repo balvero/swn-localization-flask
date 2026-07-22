@@ -1,0 +1,14 @@
+<tr id="term-{{ t.id }}">
+	{% for field in ["en", "da", "sv", "no", "notes"] %}
+	<td>
+		<input class="input input-bordered input-sm w-full" name="{{ field }}" value="{{ t[field] or '' }}"
+			hx-put="/glossary/{{ t.id }}" hx-trigger="change" hx-include="closest tr"
+			hx-target="closest tr" hx-swap="outerHTML" />
+	</td>
+	{% endfor %}
+	<td>
+		<button class="btn btn-xs btn-error"
+			hx-delete="/glossary/{{ t.id }}" hx-confirm="Delete this glossary term?"
+			hx-target="closest tr" hx-swap="outerHTML">Delete</button>
+	</td>
+</tr>

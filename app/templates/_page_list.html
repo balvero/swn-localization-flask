@@ -1,0 +1,53 @@
+{# Sidebar page list. tab_base is "/translations" or "/completed". `oob`
+   (see the panel template's note on the same pattern) is only ever true
+   when this is a standalone out-of-band refresh after an action that
+   changes missing/approved counts (currently: drafting) — never on a
+   normal targeted render. #}
+<div class="w-68 border-r border-base-200 flex flex-col" id="page-list" {% if oob %}hx-swap-oob="true"{% endif %}
+	hx-target="#app-shell" hx-select="#app-shell" hx-swap="innerHTML show:none">
+	{% if pages %}
+	<div class="flex items-center justify-between px-3 py-2 text-xs bg-base-100 border-b border-base-200">
+		<span class="font-bold text-base-content/70 {{ 'invisible' if tab_base == '/completed' else '' }}">
+			{{ total_missing }} missing · {{ pages|length }} page{{ "s" if pages|length != 1 else "" }}
+		</span>
+		<a class="text-base-content/50 hover:text-base-content underline cursor-pointer {{ 'invisible' if tab_base == '/completed' else '' }}"
+			href="{{ tab_base }}{{ '/' + active_slug if active_slug else '' }}?sort={{ 'name' if sort_by == 'missing' else 'missing' }}"
+			title="Change sidebar sort order">
+			{{ "By name" if sort_by == "name" else "Most missing" }}
+		</a>
+	</div>
+	{% endif %}
+	<ul class="menu bg-base-100 rounded-none flex-nowrap gap-2 flex-1 w-full">
+		{% for p in pages %}
+		<li>
+			<a href="{{ tab_base }}/{{ p.slug }}?sort={{ sort_by }}"
+				class="cursor-pointer transition-colors rounded-sm no-underline {{ 'bg-primary/10 text-primary font-medium' if p.slug == active_slug else '' }}">
+				<div class="flex flex-col items-start w-full gap-1">
+					<span>{{ p.label }}</span>
+					<div class="flex items-center gap-2 w-full">
+						<progress class="progress progress-success flex-1 h-1.5"
+							value="{{ p.approved_count }}" max="{{ p.total_count or 1 }}"></progress>
+						<span class="text-xs text-base-content/50 shrink-0">
+							{{ ((p.approved_count / p.total_count * 100) | round | int) if p.total_count else 0 }}%
+						</span>
+					</div>
+					{% if p.missing_count > 0 %}
+					<span class="text-xs text-warning">{{ p.missing_count }} missing</span>
+					{% endif %}
+					<div class="flex items-center gap-1">
+						{% for code, label in LANGS %}
+						<span title="{{ label }}: {{ 'Published' if p[code + '_published_at'] else 'Not published' }}"
+							class="w-2 h-2 rounded-full {{ FLAG_BG[code].split(' ')[0] if p[code + '_published_at'] else 'bg-base-300' }}"></span>
+						{% endfor %}
+					</div>
+				</div>
+			</a>
+		</li>
+		{% endfor %}
+		{% if not pages %}
+		<li class="p-4 text-sm text-base-content/50">
+			{{ "No completed pages yet." if tab_base == "/completed" else "No pages yet — use the Import tab to add one." }}
+		</li>
+		{% endif %}
+	</ul>
+</div>

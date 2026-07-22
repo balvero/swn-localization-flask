@@ -1,0 +1,109 @@
+{# Right-hand panel: one page's action row + all its sections/keys.
+   page can be None (no page selected / empty state). `oob` is only ever
+   true when this template is rendered as a completion-time out-of-band
+   refresh from a finished "Draft all" job (see ui_translations.py) — it
+   must stay false/unset for every normal targeted render, or htmx would
+   treat this as an orphan OOB fragment instead of fulfilling whatever
+   hx-target actually pointed at #translations-panel. #}
+<div class="flex-1 p-5 bg-base-200" id="translations-panel" {% if oob %}hx-swap-oob="true"{% endif %}>
+{% if page %}
+	<div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+		<div class="text-xs text-base-content/50">
+			{% if tab_base == "/completed" and page.manually_completed %}
+				<span>Marked complete by {{ page.completed_by }} on {{ page.completed_at.strftime("%Y-%m-%d") if page.completed_at else "" }}</span>
+			{% elif tab_base == "/completed" %}
+				<span>Fully approved across all languages — unapprove a translation below to move this back to Translations.</span>
+			{% endif %}
+		</div>
+		<div class="flex flex-wrap items-center gap-3">
+			<div class="flex items-center gap-2">
+				<span class="text-xs text-base-content font-bold mr-1 whitespace-nowrap">CSV:</span>
+				<a class="btn btn-sm btn-outline btn-success" href="/translations/{{ page.slug }}/export-csv" hx-boost="false"
+					title="Download this page's keys (English + current translations) as a CSV">Export CSV</a>
+				<form action="/translations/{{ page.slug }}/import-csv" method="post" enctype="multipart/form-data" class="inline">
+					<label class="btn btn-sm btn-outline btn-success"
+						title="Upload a filled-in CSV to apply its translations — saved as drafts">
+						Upload CSV
+						<input type="file" name="csv_file" accept=".csv,text/csv" class="hidden" onchange="this.form.submit()" />
+					</label>
+				</form>
+			</div>
+			<div class="flex items-center gap-2">
+				<span class="text-xs text-base-content font-bold mr-1 whitespace-nowrap">Draft all with AI:</span>
+				<div class="join">
+					{% for code, label in LANGS %}
+					{% set slug = page.slug %}
+					{% set job_id = None %}
+					{% set oob = False %}
+					{% include "_draft_button.html" %}
+					{% endfor %}
+				</div>
+			</div>
+			{% if tab_base != "/completed" or page.manually_completed %}
+			<button class="btn btn-sm ml-4 {{ 'btn-outline border-base-content/30' if tab_base == '/completed' else 'btn-success text-white border-none' }}"
+				hx-put="/translations/{{ page.slug }}/complete"
+				hx-vals='{"completed": {{ "false" if tab_base == "/completed" else "true" }} }'
+				hx-target="#main-content" hx-swap="outerHTML">
+				{{ "Reopen" if tab_base == "/completed" else "Mark as complete" }}
+			</button>
+			{% endif %}
+		</div>
+	</div>
+	<div class="flex flex-wrap justify-end items-center gap-3 mb-6">
+		<div class="flex items-center gap-2">
+			<span class="text-xs text-base-content font-bold mr-1 whitespace-nowrap">Published:</span>
+			<div class="join">
+				{% for code, label in LANGS %}
+				{% set published_at = page[code + "_published_at"] %}
+				<button class="btn btn-sm join-item {{ 'text-white border-none ' + FLAG_BG[code] if published_at else 'btn-outline border-base-content/30' }}"
+					title="{{ label }}{{ ': published ' + published_at.strftime('%Y-%m-%d') if published_at else '' }}"
+					hx-put="/translations/{{ page.slug }}/publish/{{ code }}"
+					hx-vals='{"published": {{ "false" if published_at else "true" }} }'
+					hx-target="#translations-panel" hx-swap="outerHTML">
+					{{ ("✓ " + code|upper) if published_at else code|upper }}
+				</button>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="flex items-center gap-2">
+			<span class="text-xs text-base-content font-bold mr-1 whitespace-nowrap">Export as twig:</span>
+			<div class="join">
+				{% for code, label in LANGS %}
+				<a class="btn btn-sm join-item text-white border-none {{ FLAG_BG[code] }}" title="{{ label }}" hx-boost="false"
+					href="/translations/{{ page.slug }}/build/{{ code }}">{{ code|upper }}</a>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+	<div class="flex flex-wrap items-center gap-2 mb-4">
+		<form hx-get="/translations/{{ page.slug }}" hx-target="#translations-panel" hx-swap="outerHTML" hx-trigger="input" class="flex-1 min-w-[200px]">
+			<input type="text" name="q" value="{{ filter_text or '' }}" placeholder="Filter by key or English text…"
+				class="input input-sm input-bordered border-base-content/30 w-full" />
+		</form>
+		<select class="select select-sm select-bordered border-base-content/30"
+			hx-get="/translations/{{ page.slug }}" hx-target="#translations-panel" hx-swap="outerHTML"
+			hx-trigger="change" name="status">
+			<option value="all" {% if filter_status == "all" %}selected{% endif %}>All</option>
+			<option value="missing" {% if filter_status == "missing" %}selected{% endif %}>Missing a language</option>
+			<option value="draft" {% if filter_status == "draft" %}selected{% endif %}>Needs review (draft)</option>
+			<option value="approved" {% if filter_status == "approved" %}selected{% endif %}>Fully approved</option>
+		</select>
+	</div>
+
+	{% for section_slug, section in sections.items() %}
+	{% if section["keys"] %}
+	<div class="mb-6">
+		<div class="text-sm font-semibold text-base-content/70 mb-3">{{ section.label }}</div>
+		{% for full_key, k in section["keys"].items() %}
+			{% include "_key_card.html" %}
+		{% endfor %}
+	</div>
+	{% endif %}
+	{% endfor %}
+{% else %}
+	<div class="p-10 text-base-content/50 text-sm">
+		{{ "No completed pages yet." if tab_base == "/completed" else "Select a page from the sidebar, or use the Import tab to add one." }}
+	</div>
+{% endif %}
+</div>

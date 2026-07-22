@@ -1,0 +1,1 @@
+- keyId {{KEY_ID}} (key: {{KEY}}): "{{EN_TEXT}}"{{PRIOR_LINE}}{{GLOSSARY_LINE}}

@@ -1,0 +1,8 @@
+Translate each of the following English marketing copy items into {{LANG_NAME}}. Each item is independent — translate it on its own — but keep tone and terminology consistent across all of them, since they're from the same page section.
+
+{{ITEMS}}{{MEMORY_SECTION}}
+
+Style guide:
+{{STYLE_GUIDE}}
+
+Respond with one object per item, using the exact integer keyId given above and ONLY the translated text (no explanation, no quotes, no markdown) as the translation.

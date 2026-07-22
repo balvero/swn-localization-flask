@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p-5">
+	<div class="flex justify-between items-center mb-4">
+		<div>
+			<div class="font-semibold text-base">Style guide</div>
+			<div class="text-xs text-base-content/50">Applied automatically whenever new translations are drafted</div>
+		</div>
+	</div>
+	<textarea class="textarea textarea-bordered w-full leading-relaxed" rows="14" name="content"
+		hx-put="/style-guide" hx-trigger="keyup changed delay:600ms" hx-swap="none">{{ content }}</textarea>
+</div>
+{% endblock %}

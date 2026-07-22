@@ -1,0 +1,17 @@
+<div class="bg-base-100 border border-base-300 rounded-lg px-3 py-2 text-xs">
+	{% if not rows %}
+	<div class="text-base-content/50">No changes recorded yet.</div>
+	{% else %}
+	{% for r in rows %}
+	<div class="pb-1.5 mb-1.5 {{ 'border-b border-base-300' if not loop.last else '' }}">
+		<div class="text-base-content/50 mb-0.5">
+			{{ r.changed_at.strftime("%Y-%m-%d %H:%M") if r.changed_at else "" }} — {{ r.changed_by }} — {{ r.old_status or "new" }} → {{ r.new_status }}
+		</div>
+		{% if r.old_text %}
+		<div class="text-base-content/50 line-through">{{ r.old_text }}</div>
+		{% endif %}
+		<div>{{ r.new_text }}</div>
+	</div>
+	{% endfor %}
+	{% endif %}
+</div>

@@ -1,0 +1,25 @@
+{# One language's "Draft all with AI" bulk button. Reused three ways:
+   1. Initial panel render — idle state, job_id unset.
+   2. The POST response after clicking it — starts polling itself.
+   3. Each status poll — either updated progress (still polling) or back
+      to idle (done), always delivered as an out-of-band swap (matched by
+      id, independent of whatever "main" swap the polling request used —
+      see ui_translations.py) since the polling element's own hx-swap is
+      "none". #}
+<button id="draft-btn-{{ code }}" class="btn btn-sm join-item text-white border-none {{ FLAG_BG[code] }}"
+	{% if oob %}hx-swap-oob="true"{% endif %}
+	{% if job_id %}
+	hx-get="/translations/{{ slug }}/draft-all/{{ code }}/status/{{ job_id }}"
+	hx-trigger="load delay:1s" hx-swap="none"
+	{% else %}
+	title="Generate {{ LANG_NAMES[code] }} translations with AI"
+	hx-post="/translations/{{ slug }}/draft-all/{{ code }}"
+	hx-target="this" hx-swap="none"
+	hx-disabled-elt="this"
+	{% endif %}>
+	{% if job_id %}
+		<span class="loading loading-spinner loading-xs"></span> {{ done }}/{{ total }}
+	{% else %}
+		{{ code|upper }}
+	{% endif %}
+</button>
