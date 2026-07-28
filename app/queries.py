@@ -125,7 +125,7 @@ def get_key_card(key_id):
 
 def get_glossary_terms():
     with get_cursor() as (conn, cur):
-        cur.execute("select * from glossary_terms order by id")
+        cur.execute("select * from glossary_terms order by id desc")
         columns = [d[0] for d in cur.description]
         return [dict(zip(columns, row)) for row in cur.fetchall()]
 
