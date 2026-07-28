@@ -47,7 +47,7 @@
 		   navigation links actually live, this can't leak into unrelated
 		   fragment-returning actions elsewhere on the page. #}
 		<div role="tablist" class="flex gap-1 bg-neutral px-3 py-3 items-center"
-			hx-target="#app-shell" hx-select="#app-shell" hx-swap="innerHTML show:none">
+			hx-target="#app-shell" hx-select="#app-shell" hx-swap="innerHTML show:window:top">
 			{% set tabs = [
 				("translations", "/translations", "Translations"),
 				("completed", "/completed", "Completed"),
@@ -67,17 +67,55 @@
 		</div>
 	</div>
 </div>
+<button id="scroll-top-btn" type="button" aria-label="Scroll to top"
+	onclick="window.scrollTo({top: 0, behavior: 'smooth'})"
+	class="btn btn-circle btn-neutral shadow-lg fixed bottom-6 right-6 z-40 opacity-0 pointer-events-none transition-opacity duration-200">
+	<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+		<path fill-rule="evenodd" d="M10 3a1 1 0 01.707.293l5 5a1 1 0 01-1.414 1.414L11 6.414V16a1 1 0 11-2 0V6.414L5.707 9.707a1 1 0 01-1.414-1.414l5-5A1 1 0 0110 3z" clip-rule="evenodd" />
+	</svg>
+</button>
 <script>
+	// Lives outside #app-shell (which gets its innerHTML replaced on every
+	// boosted tab navigation) so this listener is only ever attached once,
+	// not re-bound per page.
+	(function () {
+		const btn = document.getElementById("scroll-top-btn");
+		window.addEventListener("scroll", function () {
+			const show = window.scrollY > 400;
+			btn.classList.toggle("opacity-0", !show);
+			btn.classList.toggle("pointer-events-none", !show);
+		});
+	})();
 	// Small "Saved"/error toasts driven by an HX-Trigger response header
 	// (see app/routes/ui_translations.py's save routes) instead of a full
 	// row re-render, so typing isn't disrupted mid-edit.
 	document.body.addEventListener("toast", function (evt) {
 		const el = document.createElement("div");
 		el.className = "toast toast-top toast-end z-50";
+		el.style.maxWidth = "28rem";
+		el.style.top = "5rem"; // nudged down from the very top edge, clear of the nav tabs
+		const alert = document.createElement("div");
 		const kind = evt.detail.error ? "alert-error" : "alert-success";
-		el.innerHTML = '<div class="alert ' + kind + ' text-sm">' + evt.detail.message + '</div>';
+		alert.className = "alert " + kind + " text-sm flex items-start justify-between shadow-sm pr-2";
+		
+		const msg = document.createElement("div");
+		msg.className = "whitespace-pre-wrap break-words flex-1 pt-1 pb-1";
+		msg.textContent = evt.detail.message;
+		alert.appendChild(msg);
+
+		const closeBtn = document.createElement("button");
+		closeBtn.type = "button";
+		closeBtn.className = "btn btn-ghost btn-sm btn-circle shrink-0 mt-0.5";
+		closeBtn.setAttribute("aria-label", "Close toast");
+		closeBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>`;
+		closeBtn.onclick = () => el.remove();
+		alert.appendChild(closeBtn);
+
+		el.appendChild(alert);
 		document.body.appendChild(el);
-		setTimeout(() => el.remove(), 2000);
+		// Errors tend to be longer and more worth actually reading (e.g. a
+		// full Gemini quota message) — give them more time on screen.
+		setTimeout(() => el.remove(), evt.detail.error ? 14000 : 4000);
 	});
 </script>
 </body>

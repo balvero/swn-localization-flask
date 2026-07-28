@@ -4,7 +4,7 @@
    changes missing/approved counts (currently: drafting) — never on a
    normal targeted render. #}
 <div class="w-68 border-r border-base-200 flex flex-col" id="page-list" {% if oob %}hx-swap-oob="true"{% endif %}
-	hx-target="#app-shell" hx-select="#app-shell" hx-swap="innerHTML show:none">
+	hx-target="#app-shell" hx-select="#app-shell" hx-swap="innerHTML show:window:top">
 	{% if pages %}
 	<div class="flex items-center justify-between px-3 py-2 text-xs bg-base-100 border-b border-base-200">
 		<span class="font-bold text-base-content/70 {{ 'invisible' if tab_base == '/completed' else '' }}">
@@ -24,6 +24,7 @@
 				class="cursor-pointer transition-colors rounded-sm no-underline {{ 'bg-primary/10 text-primary font-medium' if p.slug == active_slug else '' }}">
 				<div class="flex flex-col items-start w-full gap-1">
 					<span>{{ p.label }}</span>
+					<span class="text-[10px] text-base-content/50 -mt-1 font-mono break-all">/{{ p.slug }}</span>
 					<div class="flex items-center gap-2 w-full">
 						<progress class="progress progress-success flex-1 h-1.5"
 							value="{{ p.approved_count }}" max="{{ p.total_count or 1 }}"></progress>
