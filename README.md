@@ -27,6 +27,40 @@ errors):
 - **Import** — paste raw .twig/HTML, extract (reuses the sentinel-leak-fixed
   extraction logic), review/edit the key table, add/delete rows, commit
   (idempotent upsert, same as the original's `import_page.py`).
+- **AI drafting has three pluggable backends** (`app/drafting.py`, selected
+  via `DRAFT_BACKEND`): Gemini (default — the only one to ever use on
+  anything deployed), Ollama (local-only, no daily request quota), and
+  OpenRouter (cloud-hosted, free tier, works anywhere including deployed).
+  All three share the exact same prompt-building/batching/glossary/
+  style-guide logic and structured-JSON-output contract — only the "call
+  the model" step branches.
+  - **Ollama** uses `gemma4:e2b` (a general instruction-following model,
+    not Gemma's translation-specialized `translategemma` sibling — that
+    one's fixed single-string prompt format can't carry this app's
+    glossary/style-guide/batch context). Deliberately the smaller "edge"
+    size, not `gemma4:12b` — measured directly: 12b took 7+ minutes on a
+    glossary-constrained prompt and never finished naturally (had to be
+    killed); e2b did the identical prompt correctly in ~33s. Requires
+    `brew install ollama`, `brew services start ollama`, and
+    `ollama pull gemma4:e2b` (~7.2GB). Only one Ollama install should ever
+    run at a time — this machine had both the Homebrew CLI version and the
+    `/Applications/Ollama.app` GUI app running simultaneously at one
+    point, which caused exactly the kind of stuck/hung generation
+    described above; Homebrew's was removed, keeping the GUI app as the
+    one to use.
+  - **OpenRouter** uses the free-tier `google/gemma-4-31b-it:free` (full
+    31B dense model, cloud-hosted — not bottlenecked by local hardware the
+    way `gemma4:12b` was). OpenAI-compatible API, so structured output uses
+    `response_format: {"type": "json_schema", ...}` instead of Gemini's
+    `response_schema`/Ollama's `format=` — same JSON-array-matched-by-
+    keyId contract underneath, just wrapped in an object at the schema
+    root (OpenAI-style structured outputs require an object root; the
+    array gets unwrapped right after the call). Needs `OPENROUTER_API_KEY`
+    (free to create at openrouter.ai). The free tier has its own
+    per-minute/per-day rate limit that isn't published in a way that's
+    checkable outside the OpenRouter dashboard — if bulk drafting starts
+    failing with 429s, that's why; each batch failure surfaces the real
+    error message in the toast either way.
 
 **Not done yet, deliberately deferred:**
 - **Auth + roles.** `app/auth.py` is still a mock-user stub (`AUTH_MODE=mock`).

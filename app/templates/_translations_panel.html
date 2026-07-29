@@ -31,9 +31,19 @@
 			<div class="flex items-center gap-2">
 				<span class="text-xs text-base-content font-bold mr-1 whitespace-nowrap">Draft all with AI:</span>
 				<div class="join">
+					<button class="btn btn-sm join-item btn-primary text-white border-none"
+						title="Generate all translations with AI"
+						hx-post="/translations/{{ page.slug }}/draft-all/all"
+						hx-swap="none"
+						hx-disabled-elt="this">
+						ALL
+					</button>
 					{% for code, label in LANGS %}
 					{% set slug = page.slug %}
-					{% set job_id = None %}
+					{% set active_job = active_jobs.get(code) if active_jobs else None %}
+					{% set job_id = active_job.job_id if active_job else None %}
+					{% set done = active_job.done if active_job else 0 %}
+					{% set total = active_job.total if active_job else 0 %}
 					{% set oob = False %}
 					{% include "_draft_button.html" %}
 					{% endfor %}

@@ -58,7 +58,10 @@
 				<button class="btn btn-xs btn-outline gap-1"
 					hx-post="/translations/keys/{{ k.key_id }}/{{ code }}/draft"
 					hx-target="#key-{{ k.key_id }}" hx-swap="outerHTML"
-					hx-disabled-elt="this">
+					hx-disabled-elt="this"
+					{% if t.status == "approved" %}
+					hx-confirm="This translation is already approved. Draft over it with AI anyway? (uses one of today's limited Gemini requests, and reverts it to draft status)"
+					{% endif %}>
 					Draft with AI
 					<span class="htmx-indicator loading loading-spinner loading-xs"></span>
 				</button>

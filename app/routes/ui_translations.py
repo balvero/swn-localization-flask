@@ -17,7 +17,7 @@ from ..db import get_cursor
 from ..auth import require_user
 from ..queries import list_pages, get_page_sections, get_key_card, LANGS
 from ..drafting import draft_batch, get_client
-from ..jobs import create_job, update_job, get_job, cleanup_job
+from ..jobs import create_job, update_job, get_job, cleanup_job, get_active_jobs
 
 bp = Blueprint("ui_translations", __name__)
 
@@ -32,6 +32,12 @@ MIN_BATCH_INTERVAL_SECONDS = 13
 
 
 def _toast_header(message, error=False):
+    # Gemini's SDK exceptions stringify to the whole nested error dict
+    # (code, message, a details array with doc URLs and quota metric names)
+    # — hundreds of characters. Truncate to the actually-readable part; the
+    # full text is still visible in the server logs if ever needed.
+    if len(message) > 200:
+        message = message[:200] + "…"
     # json.dumps, not a hand-built string — Gemini error text can contain
     # quotes/special characters that would otherwise break the header.
     return {"HX-Trigger": json.dumps({"toast": {"message": message, "error": error}})}
@@ -166,6 +172,7 @@ def _render_tab(tab_base, slug):
         LANG_NAMES=LANG_NAMES,
         FLAG_BG=FLAG_BG,
         is_dev=_is_dev(),
+        active_jobs=get_active_jobs(active_slug) if active_slug else {},
     )
 
     if request.headers.get("HX-Request") and not request.headers.get("HX-Boosted"):
@@ -201,11 +208,12 @@ def _build_ctx(tab_base, slug, sort_by="missing"):
         LANG_NAMES=LANG_NAMES,
         FLAG_BG=FLAG_BG,
         is_dev=_is_dev(),
+        active_jobs=get_active_jobs(active_slug) if active_slug else {},
     )
 
 
 @bp.route("/translations")
-@bp.route("/translations/<slug>")
+@bp.route("/translations/<path:slug>")
 def translations_tab(slug=None):
     if not require_user(request):
         return "Unauthorized — please log in", 401
@@ -213,7 +221,7 @@ def translations_tab(slug=None):
 
 
 @bp.route("/completed")
-@bp.route("/completed/<slug>")
+@bp.route("/completed/<path:slug>")
 def completed_tab(slug=None):
     if not require_user(request):
         return "Unauthorized — please log in", 401
@@ -358,7 +366,7 @@ def key_history(key_id, lang):
 
 # ---- Page-level actions ----
 
-@bp.route("/translations/<slug>/complete", methods=["PUT"])
+@bp.route("/translations/<path:slug>/complete", methods=["PUT"])
 def mark_complete(slug):
     user = require_user(request)
     if not user:
@@ -373,7 +381,7 @@ def mark_complete(slug):
     return "", 200, {"HX-Redirect": dest}
 
 
-@bp.route("/translations/<slug>/publish/<lang>", methods=["PUT"])
+@bp.route("/translations/<path:slug>/publish/<lang>", methods=["PUT"])
 def mark_published(slug, lang):
     user = require_user(request)
     if not user:
@@ -414,47 +422,73 @@ def _run_draft_job(job_id, lang, batches):
         if last_started and elapsed < MIN_BATCH_INTERVAL_SECONDS:
             time.sleep(MIN_BATCH_INTERVAL_SECONDS - elapsed)
         last_started = time.monotonic()
+        batch_error_message = None
         try:
             # One connection per batch (not one for the whole job) — so a
             # later batch failing doesn't roll back translations already
             # committed by earlier ones.
             with get_cursor() as (conn, cur):
                 _succeeded, failed, batch_error = draft_batch(client, cur, batch, lang)
-            total_failed += len(failed) if not batch_error else len(batch)
-        except Exception:
+            if batch_error:
+                total_failed += len(batch)
+                batch_error_message = batch_error[1]
+            else:
+                total_failed += len(failed)
+        except Exception as err:
             total_failed += len(batch)  # never crash the whole run over one bad batch
+            batch_error_message = str(err)
         done += len(batch)
-        update_job(job_id, done=done, failed=total_failed)
+        update_job(job_id, done=done, failed=total_failed, error=batch_error_message)
 
     update_job(job_id, status="done")
 
 
-@bp.route("/translations/<slug>/draft-all/<lang>", methods=["POST"])
+def _start_draft_all(slug, lang):
+    sections = get_page_sections(slug)
+    targets = []
+    for sec in sections.values():
+        targets.extend(
+            k["key_id"] for k in sec["keys"].values()
+            if not k["skip"] and not k["translations"].get(lang, {}).get("text")
+        )
+    batches = [targets[i : i + MAX_DRAFT_BATCH_SIZE] for i in range(0, len(targets), MAX_DRAFT_BATCH_SIZE)]
+
+    total = sum(len(b) for b in batches)
+    if not batches:
+        return None, 0
+
+    job_id = create_job(total, slug=slug, lang=lang)
+    threading.Thread(target=_run_draft_job, args=(job_id, lang, batches), daemon=True).start()
+    return job_id, total
+
+
+@bp.route("/translations/<path:slug>/draft-all/<lang>", methods=["POST"])
 def draft_all_for_lang(slug, lang):
     if not require_user(request):
         return "Unauthorized — please log in", 401
 
-    sections = get_page_sections(slug)
-    batches = []
-    for sec in sections.values():
-        targets = [
-            k["key_id"] for k in sec["keys"].values()
-            if not k["skip"] and not k["translations"].get(lang, {}).get("text")
-        ]
-        for i in range(0, len(targets), MAX_DRAFT_BATCH_SIZE):
-            batches.append(targets[i : i + MAX_DRAFT_BATCH_SIZE])
+    if lang == "all":
+        html_parts = []
+        started = 0
+        for code, _ in LANGS:
+            job_id, total = _start_draft_all(slug, code)
+            if job_id:
+                started += 1
+                html_parts.append(_draft_button_html(code, slug, job_id=job_id, done=0, total=total, oob=True))
+        if started == 0:
+            headers = _toast_header("Nothing to draft — every key already has translations for all languages")
+            return "", 200, headers
+        return "".join(html_parts), 200, _toast_header("Started drafting all languages")
 
-    total = sum(len(b) for b in batches)
-    if not batches:
+    job_id, total = _start_draft_all(slug, lang)
+    if not job_id:
         headers = _toast_header(f"Nothing to draft — every key already has a {LANG_NAMES[lang]} translation")
         return _draft_button_html(lang, slug), 200, headers
 
-    job_id = create_job(total)
-    threading.Thread(target=_run_draft_job, args=(job_id, lang, batches), daemon=True).start()
     return _draft_button_html(lang, slug, job_id=job_id, done=0, total=total)
 
 
-@bp.route("/translations/<slug>/draft-all/<lang>/status/<job_id>")
+@bp.route("/translations/<path:slug>/draft-all/<lang>/status/<job_id>")
 def draft_all_status(slug, lang, job_id):
     if not require_user(request):
         return "Unauthorized — please log in", 401
@@ -475,9 +509,10 @@ def draft_all_status(slug, lang, job_id):
         elif job["status"] == "error":
             headers = _toast_header(f"Draft all failed: {job['error']}", error=True)
         elif job["failed"] > 0:
+            reason = f" ({job['error']})" if job["error"] else ""
             headers = _toast_header(
                 f"Drafted {job['total'] - job['failed']}/{job['total']} {LANG_NAMES[lang]} translations "
-                f"— {job['failed']} failed",
+                f"— {job['failed']} failed{reason}",
                 error=True,
             )
         else:
@@ -489,7 +524,7 @@ def draft_all_status(slug, lang, job_id):
     return _draft_button_html(lang, slug, job_id=job_id, done=job["done"], total=job["total"])
 
 
-@bp.route("/translations/<slug>/export-csv")
+@bp.route("/translations/<path:slug>/export-csv")
 def export_csv(slug):
     if not require_user(request):
         return "Unauthorized — please log in", 401
@@ -512,7 +547,7 @@ def export_csv(slug):
     )
 
 
-@bp.route("/translations/<slug>/import-csv", methods=["POST"])
+@bp.route("/translations/<path:slug>/import-csv", methods=["POST"])
 def import_csv(slug):
     user = require_user(request)
     if not user:
@@ -552,7 +587,7 @@ def import_csv(slug):
     return _render_tab(tab_base, slug)
 
 
-@bp.route("/translations/<slug>/build/<lang>")
+@bp.route("/translations/<path:slug>/build/<lang>")
 def build_download(slug, lang):
     if not require_user(request):
         return "Unauthorized — please log in", 401

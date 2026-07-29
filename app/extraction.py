@@ -75,31 +75,40 @@ def extract_html(raw_html):
         if el.find_parent(["script", "style"]):
             continue
 
-        direct_texts = [
-            c for c in el.contents
-            if isinstance(c, NavigableString) and not SENTINEL_RE.match(c.strip())
-        ]
-        text = "".join(str(c) for c in direct_texts).strip()
-        text = SENTINEL_INLINE_RE.sub("", text)
-        text = re.sub(r"\s+", " ", text).strip()
+        groups = []
+        current_group = []
+        for c in el.contents:
+            if isinstance(c, NavigableString) and not SENTINEL_RE.match(c.strip()):
+                current_group.append(c)
+            else:
+                if current_group:
+                    groups.append(current_group)
+                    current_group = []
+        if current_group:
+            groups.append(current_group)
 
-        if len(text) < MIN_TEXT_LENGTH:
-            continue
+        for group in groups:
+            text = "".join(str(c) for c in group).strip()
+            text = SENTINEL_INLINE_RE.sub("", text)
+            text = re.sub(r"\s+", " ", text).strip()
 
-        section = section_name(el)
-        base_key = f"{section}.{el.name}_{slugify(text)}"
-        key = base_key
-        i = 2
-        while key in used_keys:
-            key = f"{base_key}_{i}"
-            i += 1
-        used_keys.add(key)
+            if len(text) < MIN_TEXT_LENGTH:
+                continue
 
-        keys[key] = text
+            section = section_name(el)
+            base_key = f"{section}.{el.name}_{slugify(text)}"
+            key = base_key
+            i = 2
+            while key in used_keys:
+                key = f"{base_key}_{i}"
+                i += 1
+            used_keys.add(key)
 
-        placeholder = f"{{{{ t.{key} }}}}"
-        for c in direct_texts:
-            c.replace_with(placeholder if c is direct_texts[0] else "")
+            keys[key] = text
+
+            placeholder = f"{{{{ t.{key} }}}}"
+            for idx, c in enumerate(group):
+                c.replace_with(placeholder if idx == 0 else "")
 
     output_html = root.decode_contents()
     output_html = restore_twig_comments(output_html, comments)

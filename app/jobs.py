@@ -11,11 +11,20 @@ _jobs = {}
 _lock = threading.Lock()
 
 
-def create_job(total):
+def create_job(total, slug=None, lang=None):
     job_id = uuid.uuid4().hex
     with _lock:
-        _jobs[job_id] = {"done": 0, "total": total, "failed": 0, "status": "running", "error": None}
+        _jobs[job_id] = {"done": 0, "total": total, "failed": 0, "status": "running", "error": None, "slug": slug, "lang": lang}
     return job_id
+
+
+def get_active_jobs(slug):
+    active = {}
+    with _lock:
+        for j_id, job in _jobs.items():
+            if job.get("slug") == slug and job["status"] == "running" and job.get("lang"):
+                active[job["lang"]] = {"job_id": j_id, "done": job["done"], "total": job["total"]}
+    return active
 
 
 def update_job(job_id, done=None, failed=None, status=None, error=None):

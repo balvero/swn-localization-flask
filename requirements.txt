@@ -2,6 +2,8 @@ flask
 flask-cors
 psycopg2-binary
 google-genai
+ollama
+requests
 python-dotenv
 gunicorn
 beautifulsoup4
