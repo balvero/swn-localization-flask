@@ -13,6 +13,8 @@
 				<span>Marked complete by {{ page.completed_by }} on {{ page.completed_at.strftime("%Y-%m-%d") if page.completed_at else "" }}</span>
 			{% elif tab_base == "/completed" %}
 				<span>Fully approved across all languages — unapprove a translation below to move this back to Translations.</span>
+			{% else %}
+				<span class="font-bold {{ 'text-warning' if page.missing_count > 0 else 'text-success' }}">{{ page.missing_count }} missing translation{{ 's' if page.missing_count != 1 else '' }}</span>
 			{% endif %}
 		</div>
 		<div class="flex flex-wrap items-center gap-3">
