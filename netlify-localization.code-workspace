@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../netlify-localization"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}

@@ -148,8 +148,16 @@ def _render_tab(tab_base, slug):
     page = next((p for p in pages if p["slug"] == active_slug), None)
 
     sections = {}
+    lang_is_complete = {code: True for code, _ in LANGS}
     if page:
         raw_sections = get_page_sections(active_slug)
+        for code, _ in LANGS:
+            missing = any(
+                not k["skip"] and not k["translations"].get(code, {}).get("text")
+                for sec in raw_sections.values()
+                for k in sec["keys"].values()
+            )
+            lang_is_complete[code] = not missing
         for sec_slug, sec in raw_sections.items():
             filtered_keys = {
                 fk: k for fk, k in sec["keys"].items()
@@ -166,6 +174,7 @@ def _render_tab(tab_base, slug):
         sort_by=sort_by,
         page=page,
         sections=sections,
+        lang_is_complete=lang_is_complete,
         filter_text=filter_text,
         filter_status=filter_status,
         LANGS=LANGS,
@@ -193,6 +202,15 @@ def _build_ctx(tab_base, slug, sort_by="missing"):
     active_slug = slug or (pages[0]["slug"] if pages else None)
     page = next((p for p in pages if p["slug"] == active_slug), None)
     sections = get_page_sections(active_slug) if page else {}
+    lang_is_complete = {code: True for code, _ in LANGS}
+    if sections:
+        for code, _ in LANGS:
+            missing = any(
+                not k["skip"] and not k["translations"].get(code, {}).get("text")
+                for sec in sections.values()
+                for k in sec["keys"].values()
+            )
+            lang_is_complete[code] = not missing
     return dict(
         active_tab="completed" if is_completed_tab else "translations",
         tab_base=tab_base,
@@ -202,6 +220,7 @@ def _build_ctx(tab_base, slug, sort_by="missing"):
         sort_by=sort_by,
         page=page,
         sections=sections,
+        lang_is_complete=lang_is_complete,
         filter_text="",
         filter_status="all",
         LANGS=LANGS,
@@ -400,10 +419,10 @@ def mark_published(slug, lang):
     return _render_tab(tab_base, slug) + _sidebar_oob_html(tab_base=tab_base, active_slug=slug)
 
 
-def _draft_button_html(code, slug, job_id=None, done=0, total=0, oob=True):
+def _draft_button_html(code, slug, job_id=None, done=0, total=0, oob=True, is_complete=False):
     return render_template(
         "_draft_button.html", code=code, slug=slug, job_id=job_id, done=done, total=total,
-        oob=oob, LANG_NAMES=LANG_NAMES, FLAG_BG=FLAG_BG,
+        oob=oob, LANG_NAMES=LANG_NAMES, FLAG_BG=FLAG_BG, is_complete=is_complete,
     )
 
 
@@ -483,7 +502,7 @@ def draft_all_for_lang(slug, lang):
     job_id, total = _start_draft_all(slug, lang)
     if not job_id:
         headers = _toast_header(f"Nothing to draft — every key already has a {LANG_NAMES[lang]} translation")
-        return _draft_button_html(lang, slug), 200, headers
+        return _draft_button_html(lang, slug, is_complete=True), 200, headers
 
     return _draft_button_html(lang, slug, job_id=job_id, done=0, total=total)
 
@@ -500,7 +519,13 @@ def draft_all_status(slug, lang, job_id):
         # and refresh the whole panel out-of-band so updated translations
         # actually show up, without disturbing anything else on the page
         # the way a full targeted re-render would have.
-        button_html = _draft_button_html(lang, slug)
+        sections = get_page_sections(slug)
+        is_complete = not any(
+            not k["skip"] and not k["translations"].get(lang, {}).get("text")
+            for sec in sections.values()
+            for k in sec["keys"].values()
+        )
+        button_html = _draft_button_html(lang, slug, is_complete=is_complete)
         panel_html = render_template("_translations_panel.html", oob=True, **_build_ctx(tab_base, slug))
         sidebar_html = _sidebar_oob_html(tab_base=tab_base, active_slug=slug)
 
