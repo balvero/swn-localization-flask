@@ -7,25 +7,39 @@
    hx-target actually pointed at #translations-panel. #}
 <div class="flex-1 p-5 bg-base-200" id="translations-panel" {% if oob %}hx-swap-oob="true"{% endif %}>
 {% if page %}
-	<div class="flex flex-wrap justify-between items-center gap-2 mb-4">
-		<div class="flex items-center gap-3">
-			{% if tab_base != "/completed" or page.manually_completed %}
-			<button class="btn btn-sm {{ 'btn-outline border-base-content/30' if tab_base == '/completed' else 'btn-success text-white border-none' }}"
-				hx-put="/translations/{{ page.slug }}/complete"
-				hx-vals='{"completed": {{ "false" if tab_base == "/completed" else "true" }} }'
-				hx-target="#main-content" hx-swap="outerHTML">
-				{{ "Reopen" if tab_base == "/completed" else "Mark as complete" }}
-			</button>
-			{% endif %}
-			<div class="text-xs text-base-content/50">
-				{% if tab_base == "/completed" and page.manually_completed %}
-					<span>Marked complete by {{ page.completed_by }} on {{ page.completed_at.strftime("%Y-%m-%d") if page.completed_at else "" }}</span>
-				{% elif tab_base == "/completed" %}
-					<span>Fully approved across all languages — unapprove a translation below to move this back to Translations.</span>
-				{% else %}
-					<span class="font-bold {{ 'text-warning' if page.missing_count > 0 else 'text-success' }}">{{ page.missing_count }} missing translation{{ 's' if page.missing_count != 1 else '' }}</span>
+	<div class="flex items-center justify-between mb-4">
+		<div>
+			<h2 class="text-2xl font-bold">{{ page.label }}</h2>
+			<div class="flex items-center gap-2 mt-1">
+				<span class="text-sm text-base-content/50 font-mono break-all">/{{ page.slug }}</span>
+				{% if tab_base == "/completed" %}
+					<span class="text-xs text-base-content/30">&bull;</span>
+					<span class="text-xs text-success">
+						{% if page.manually_completed %}
+							Marked complete by {{ page.completed_by }} on {{ page.completed_at.strftime("%Y-%m-%d") if page.completed_at else "" }}
+						{% else %}
+							Fully approved across all languages — unapprove a translation below to move this back to Translations.
+						{% endif %}
+					</span>
 				{% endif %}
 			</div>
+		</div>
+		{% if tab_base != "/completed" or page.manually_completed %}
+		<button class="btn btn-sm btn-success text-white border-none"
+			hx-put="/translations/{{ page.slug }}/complete"
+			hx-vals='{"completed": {{ "false" if tab_base == "/completed" else "true" }} }'
+			hx-target="#main-content" hx-swap="outerHTML">
+			{{ "Reopen" if tab_base == "/completed" else "Mark as complete" }}
+		</button>
+		{% endif %}
+	</div>
+	<div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+		<div class="flex items-center gap-3">
+			{% if tab_base != "/completed" %}
+			<div class="text-xs text-base-content/50">
+				<span class="font-bold {{ 'text-warning' if page.missing_count > 0 else 'text-success' }}">{{ page.missing_count }} missing translation{{ 's' if page.missing_count != 1 else '' }}</span>
+			</div>
+			{% endif %}
 		</div>
 		<div class="flex flex-wrap items-center gap-3">
 			<div class="flex items-center gap-2">

@@ -1,0 +1,815 @@
+{% extends 'templates/blocks.twig' %}
+
+{% block content %}
+    <header class="header-main">
+		{% if not hide_top %}
+			<div id="header-top">
+				{{ block('topbar') }}
+				<div class="show-for-large">
+					{{ block('message_bar') }}
+				</div>
+			</div>
+		{% endif %}
+		
+		<div data-sticky-container>
+            <div class="header-sticky sticky" data-sticky style="width:100%" data-margin-top="0" {% if hide_top %}data-top-anchor="trustpilot-banner:bottom"{% else %}data-top-anchor="header-top:bottom"{% endif %} data-btm-anchor="content:bottom" data-sticky-on="large">
+				<div class="header-bottom grid-container full">
+					<div class="grid-x grid-margin-x">
+						<div class="cell small-12 large-3 header-logo-outer">
+							<div class="grid-x v-center-large">
+								<div class="cell small-5 large-12">
+									{{ block('logo') }}
+								</div>
+								<div class="cell small-7 hide-for-large text-right">
+									
+									<a href="https://admin.myshopwired.uk/create" class="header-cta-button button mod-razzmatazz_pink try-btn">{{ t.header_cta_button.a_try_shopwired_free }}</a>
+									<button class="header-nav-toggle" data-toggle="headerNav">{{ theme.sw_icon('menu', 'menu')}}</button>
+								</div>
+							</div>
+						</div>
+						<div class="cell small-12 large-auto">{{ block('navigation') }}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div class="hide-for-large">
+            {{ block('message_bar') }}
+        </div>
+    </header>
+{% endblock %}
+
+
+
+{% block topbar %}
+	{% if global.current_path != '/compare/shopify-login' %}
+		<div class="header-top show-for-large">
+			<div class="grid-container full">
+				<div class="grid-x">
+					<div class="cell small-12 medium-6 large-5">
+						{# links list #}
+						<ul class="header-top-menu menu simple v-center-large{{ global.current_path == '/' ? '' : ' show-for-medium' }}">
+							{#<li><a href="/enterprise-customers">{{ theme.sw_icon('globe','', 'show-for-medium') }} Enterprise <span class="show-for-medium">Solutions</span></a></li>#}
+							<li><a href="/contact-us">{{ t.header_top_menu.a_theme_sw_icon_globe }} <span class="show-for-medium">Us</span></a></li>
+<!-- 							<li><a href="/book-a-call">Book a Call</a></li> -->
+						</ul>
+					</div>
+					<div class="cell show-for-medium medium-6 large-auto">
+						{# top buttons #}
+						<div class="header-top-buttons v-center-large medium-text-right">
+							<a href="#" class="header-search-button button mod-transparent text-blue hide-for-large">{{ theme.sw_icon('glass', 'Search') }}</a>
+							<a href="/account/login" class="button mod-razzmatazz_pink mod-hollow bg-white show-for-large margin-left">{{ t.button.a_login }}</a>
+							<a href="https://admin.myshopwired.uk/create" class="button mod-razzmatazz_pink show-for-large try-btn">{{ t.button.a_try_shopwired_free }}</a>
+							
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}
+
+
+{% block message_bar %}
+	{% if global.current_path != '/compare/shopify-login' %}
+		<div class="header-message{{ headerMessageClass ? ' ' ~ headerMessageClass : '' }}">
+			<div class="grid-container full">
+				<div class="grid-x">
+					<div class="cell">
+						<p class="text-center no-margin">
+							{{ t.text_center.p_create_your_own_ecommerce }}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}
+
+
+{% block logo %}
+    <a href="/" class="header-logo">
+        {{ t.header_logo.a_include_partials_logo_vector }}
+    </a>
+{% endblock %}
+
+
+{% block navigation %}
+
+    {% set placeholder = html.image('//place-hold.it/65x65/c3c5c6/ffffff.jpeg', '', '', '', true, false, '//place-hold.it/65x65/c3c5c6/ffffff.jpeg, //place-hold.it/130x130/f5f8fa/ffffff.jpeg', true) %}
+
+    <div class="header-nav-container v-center-large show-for-large" id="headerNav" data-toggler=".show-for-large">
+        {# mobile search form #}
+        <div class="header-nav-search hide-for-medium hide">
+            <form>
+                <div class="header-nav-search-group input-group">
+                    <input class="input-group-field" type="search" placeholder="Search">
+                    <span class="input-group-label">
+                        <button type="submit">{{ theme.sw_icon('glass', 'search', 'text-blue') }}</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <ul class="header-nav vertical large-horizontal menu" data-responsive-menu="accordion large-dropdown" data-force-follow="false" data-click-open="true" data-disable-hover="true">
+            <li>
+                <a href="/">{{ t.header_nav.a_home }}</a>
+            </li>
+			<li class="hide-for-t hide-for-large">
+                <a href="/account/login">{{ t.hide_for_t.a_login }}</a>
+            </li>
+			<li class="hide-for-t hide-for-large">
+                <a href="/contact-us">{{ t.hide_for_t.a_contact_us }}</a>
+            </li>
+			<li class="hide-for-t hide-for-large book-a-call-link">
+                <a href="/book-a-call">{{ t.hide_for_t.a_book_a_call }}</a>
+            </li>
+            <li>
+                <a href="/features">{{ t.header_nav.a_features }}</a>
+                <ul class="menu header-nav-sub">
+                    <li>
+                        <a href="/features">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/icons/icon-features-tour--1x.png', '', '', '', true, false, 'images/icons/icon-features-tour--1x.png, images/icons/icon-features-tour--2x.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>{{ t.small_10.strong_feature_tour }}</strong>
+                                    <span>{{ t.small_10.span_all_the_features_that }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+					<li>
+                        <a href="/marketing-tools">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/icon-marketing-tools--1x.png', '', '', '', true, false, 'images/icon-marketing-tools--1x.png, images/icon-marketing-tools--retina-2.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>{{ t.small_10.strong_marketing_tools }}</strong>
+                                    <span>{{ t.small_10.span_extend_the_functionality_of }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/apps">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/icons/icon-apps--1x.png', '', '', '', true, false, 'images/icons/icon-apps--1x.png, images/icons/icon-apps--2x.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>{{ t.small_10.strong_apps_integrations }}</strong>
+                                    <span>{{ t.small_10.span_extend_the_functionality_of_2 }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/multi-channel">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/icons/icon-multichannel-integration--1x.png', '', '', '', true, false, 'images/icons/icon-multichannel-integration--1x.png, images/icons/icon-multichannel-integration--2x.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>{{ t.small_10.strong_multichannel_integrations }}</strong>
+                                    <span>{{ t.small_10.span_sell_through_ebay_facebook }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/payments">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/icons/icon-payment-gateways--1x.png', '', '', '', true, false, 'images/icons/icon-payment-gateways--1x.png, images/icons/icon-payment-gateways--2x.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>{{ t.small_10.strong_supported_payment_gateways }}</strong>
+                                    <span>{{ t.small_10.span_integrated_with_up_to }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+			<li>
+                <a href="/examples">{{ t.header_nav.a_examples }}</a>
+            </li>
+			<li>
+                <a href="/themes">{{ t.header_nav.a_themes }}</a>
+            </li>
+            <li>
+                <a href="/pricing">{{ t.header_nav.a_pricing }}</a>
+            </li>
+            <li>
+                <a href="/migrating-to-shopwired">{{ t.header_nav.a_switching }} <span class="hide-for-t">{{ t.hide_for_t.span_to_shopwired }}</span></a>
+            </li>
+            <li>
+                <a href="/b2b">{{ t.header_nav.a_b2b }}</a>
+            </li>
+			<li>
+				<a href="/build-a-website">{{ t.header_nav.a_for_agencies }}</a>
+			</li>
+            <li>
+                <a href="#"><span class="hide-for-t">{{ t.hide_for_t.span_additional }}</span> {{ t.header_nav.a_services }}</a>
+				<ul class="menu header-nav-sub">
+                    <li>
+                        <a href="/bespoke-setup">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/icons/icon-bespoke-setup--1x.png', '', '', '', true, false, 'images/icons/icon-bespoke-setup--1x.png, images/icons/icon-bespoke-setup--2x.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>{{ t.small_10.strong_website_set_up }}</strong>
+                                    <span>{{ t.small_10.span_website_set_up_services }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+					<li>
+                        <a href="/bespoke-themes">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/icons/icon-bespoke-themes--1x.png', '', '', '', true, false, 'images/icons/icon-bespoke-themes--1x.png, images/icons/icon-bespoke-themes--2x.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>{{ t.small_10.strong_custom_themes }}</strong>
+                                    <span>{{ t.small_10.span_bespoke_theme_design }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+					<li>
+                        <a href="/bespoke-apps">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/icons/icon-bespoke-apps--1x.png', '', '', '', true, false, 'images/icons/icon-bespoke-apps--1x.png, images/icons/icon-bespoke-apps--2x.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>{{ t.small_10.strong_custom_apps }}</strong>
+                                    <span>{{ t.small_10.span_bespoke_app_development }}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+					{% if 'compare' in global.current_path %}
+					{% else %}
+<!-- 						<li class="services-existing-hide">
+							<a href="/ppc-packages">
+								<div class="header-nav-sub-item grid-x">
+									<div class="cell small-2">
+										{{ html.image('images/icons/icon-ppc-packages--1x.png', '', '', '', true, false, 'images/icons/icon-ppc-packages--1x.png, images/icons/icon-ppc-packages--2x.png') }}
+									</div>
+									<div class="cell small-10 padding-left">
+										<strong>Google Shopping</strong>
+										<span>Paid search management</span>
+									</div>
+								</div>
+							</a>
+						</li>
+						<li class="services-existing-hide">
+							<a href="/social-packages">
+								<div class="header-nav-sub-item grid-x">
+									<div class="cell small-2">
+										{{ html.image('images/icons/icon-social-packages--1x.png', '', '', '', true, false, 'images/icons/icon-social-packages--1x.png, images/icons/icon-social-packages--2x.png') }}
+									</div>
+									<div class="cell small-10 padding-left">
+										<strong>Social</strong>
+										<span>Social marketing services</span>
+									</div>
+								</div>
+							</a>
+						</li>
+						<li class="services-existing-hide">
+							<a href="/seo-packages">
+								<div class="header-nav-sub-item grid-x">
+									<div class="cell small-2">
+										{{ html.image('images/icons/icon-seo-packages--1x.png', '', '', '', true, false, 'images/icons/icon-seo-packages--1x.png, images/icons/icon-seo-packages--2x.png') }}
+									</div>
+									<div class="cell small-10 padding-left">
+										<strong>SEO</strong>
+										<span>SEO marketing services</span>
+									</div>
+								</div>
+							</a>
+						</li> -->
+					{% endif %}
+				</ul>
+            </li>
+			<li>
+			<a href="/blog">{{ t.header_nav.a_articles }}</a></li>
+<!-- 			<li>
+                <a href="#">Marketing</a>
+				<ul class="menu header-nav-sub">
+                    <li>
+                        <a href="/ppc-packages">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/icons/icon-ppc-packages--1x.png', '', '', '', true, false, 'images/icons/icon-ppc-packages--1x.png, images/icons/icon-ppc-packages--2x.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>PPC</strong>
+                                    <span>PPC marketing services</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/social-packages">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/icons/icon-social-packages--1x.png', '', '', '', true, false, 'images/icons/icon-social-packages--1x.png, images/icons/icon-social-packages--2x.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>Social</strong>
+                                    <span>Social marketing services</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+					<li>
+                        <a href="/seo-packages">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/icons/icon-seo-packages--1x.png', '', '', '', true, false, 'images/icons/icon-seo-packages--1x.png, images/icons/icon-seo-packages--2x.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>SEO</strong>
+                                    <span>SEO marketing services</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+				</ul>
+			</li> -->
+			
+<!--             <li>
+                <a href="/migrating-to-shopwired">Switching To Us</a>
+                <ul class="menu header-nav-sub switch-menu">
+					<li>
+                        <a href="/migrate-shopify">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell shrink">
+                                    <div class="image-container">
+                                        {{ html.image('images/menu/shopify-logo--x1.jpg', 'Shopify logo', 'header-nav-sub-item-img', '', true, false, 'images/menu/shopify-logo--x1.jpg, images/menu/shopify-logo--x2.jpg') }}
+                                    </div>
+                                </div>
+                                <div class="cell auto padding-left">
+                                    <span class="v-center">from Shopify</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/migrate-bigcommerce">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell shrink">
+                                    <div class="image-container">
+                                        {{ html.image('images/menu/big-commerce-logo--x1.jpg', 'Shopify logo', 'header-nav-sub-item-img', '', true, false, 'images/menu/big-commerce-logo--x1.jpg, images/menu/big-commerce-logo--x2.jpg') }}
+                                    </div>
+                                </div>
+                                <div class="cell auto padding-left">
+                                    <span class="v-center">from BigCommerce</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/migrate-squarespace">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell shrink">
+                                    <div class="image-container">
+                                        {{ html.image('images/menu/squarespace-logo--x1.jpg', 'Shopify logo', 'header-nav-sub-item-img', '', true, false, 'images/menu/squarespace-logo--x1.jpg, images/menu/squarespace-logo--x2.jpg') }}
+                                    </div>
+                                </div>
+                                <div class="cell auto padding-left">
+                                    <span class="v-center">from Squarespace</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/migrate-ekm">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell shrink">
+                                    <div class="image-container">
+                                        {{ html.image('images/menu/ekm-logo--x1.jpg', 'Shopify logo', 'header-nav-sub-item-img', '', true, false, 'images/menu/ekm-logo--x1.jpg, images/menu/ekm-logo--x2.jpg') }}
+                                    </div>
+                                </div>
+                                <div class="cell small-8 padding-left">
+                                    <span class="v-center">from EKM</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/migrate-wix">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell shrink">
+                                    <div class="image-container">
+                                        {{ html.image('images/menu/wix-logo--x1.jpg', 'Shopify logo', 'header-nav-sub-item-img', '', true, false, 'images/menu/wix-logo--x1.jpg, images/menu/wix-logo--x2.jpg') }}
+                                    </div>
+                                </div>
+                                <div class="cell auto padding-left">
+                                    <span class="v-center">from Wix</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/migrate-bigcartel">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell shrink">
+                                    <div class="image-container">
+                                        {{ html.image('images/menu/big-cartel-logo--x1.jpg', 'Shopify logo', 'header-nav-sub-item-img', '', true, false, 'images/menu/big-cartel-logo--x1.jpg, images/menu/big-cartel-logo--x2.jpg') }}
+                                    </div>
+                                </div>
+                                <div class="cell auto padding-left">
+                                    <span class="v-center">from BigCartel</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </li> -->
+			<li class="hide-for-t show-for-large show-sticky">
+				<a href="https://admin.myshopwired.uk/create" class="button mod-razzmatazz_pink show-for-large">{{ t.button.a_try_shopwired_free_2 }}</a>
+			</li>
+<!-- 			<li class="hide-for-t hide-sticky">
+                <a href="#">Sourcing Products</a>
+				<ul class="menu header-nav-sub">
+                    <li>
+                        <a href="/dropwired">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/menu/icon-aliexpress--1x.png', 'aliexpress logo', 'header-nav-sub-item-img', '', true, false, 'images/menu/icon-aliexpress--1x.png, images/menu/icon-aliexpress--2x.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>DropWired</strong>
+                                    <span>Dropship products from AliExpress</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/printful">
+                            <div class="header-nav-sub-item grid-x">
+                                <div class="cell small-2">
+                                    {{ html.image('images/menu/icon-printful--1x.png', 'Printful logo', 'header-nav-sub-item-img', '', true, false, 'images/menu/icon-printful--1x.png, images/menu/icon-printful--2x.png') }}
+                                </div>
+                                <div class="cell small-10 padding-left">
+                                    <strong>Printful</strong>
+                                    <span>Utilise the power of print-on-demand</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+            </li> -->
+<!--             <li>
+                <a href="#">Who’s It For?</a>
+                <ul class="menu header-nav-sub">
+                    <li class="header-nav-sub-item"><a href="/apps">apps.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/bitcoin">bitcoin.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/build-a-website">build-a-website.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/feature-list">feature-list.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/features">features.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/landing-page">landing-page.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/migrate-shopify">migrate-shopify.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/partners">partners.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/ppc-packages">ppc-packages.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/seo-packages">seo-packages.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/social-packages">social-packages.psd</a></li>
+                    <li class="header-nav-sub-item"><hr></li>
+                    <li class="header-nav-sub-item"><a href="/compare-big-commerce">compare-big-commerce.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/comparison-page">comparison-page.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/enterprise-customers">enterprise-customers.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/micro-small-businesses">micro-small-businesses.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/migrating-to-shopwired">migrating-to-shopwired.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/starting-a-business">starting-a-business.psd</a></li>
+                    <li class="header-nav-sub-item"><hr></li>
+                    <li class="header-nav-sub-item"><a href="/b2b">b2b.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/bespoke-setup">bespoke-setup.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/bespoke-themes">bespoke-themes.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/compare-shopify">compare-shopify.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/dropwired">dropwired.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/marketing-tools">marketing-tools.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/multi-channel">multi-channel.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/payments">payments.psd</a></li>
+                    <li class="header-nav-sub-item"><hr></li>
+                    <li class="header-nav-sub-item"><a href="/contact-us">contact-us.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/examples">examples.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/">index-6.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/account/login">login.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/pricing">pricing.psd</a></li>
+                    <li class="header-nav-sub-item"><a href="/terms-conditions">terms-conditions.psd</a></li>
+                    <li class="header-nav-sub-item no-margin"><a href="/themes">themes.psd</a></li>
+                </ul>
+            </li> -->
+        </ul>
+    </div>
+{% endblock %}
+
+
+{# TODO remove #}
+{% block header_account_dropdown %}
+    <div class="account-dropdown dropdown-pane" id="account-dropdown" data-dropdown data-v-offset="15" data-close-on-click="true">
+        <div class="account-dropdown-header">
+            <a href="/contact-us">{{ t.account_dropdown_header.a_need_help_contact_us }}</a>
+            <button class="close-button" aria-label="Dismiss alert" type="button" data-toggle="account-dropdown">
+                <span aria-hidden="true">{{ t.close_button.span_times }}</span>
+            </button>
+        </div>
+        <ul class="account-dropdown-menu no-bullet">
+            {% if global.customer.id %}
+                <li>
+                    <a href="/account">
+                        {{ t.account_dropdown_menu.a_theme_sw_icon_account }}
+                    </a>
+                </li>
+                <li>
+                    <a href="/account/orders">
+                        {{ t.account_dropdown_menu.a_theme_sw_icon_box }}
+                    </a>
+                </li>
+                <li>
+                    <a href="/account/logout">
+                        {{ t.account_dropdown_menu.a_theme_sw_icon_log }}
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="/account/login">
+                        {{ t.account_dropdown_menu.a_theme_sw_icon_account_2 }}
+                    </a>
+                </li>
+                <li>
+                    <a href="/account/create">
+                        {{ t.account_dropdown_menu.a_theme_sw_icon_user }}
+                    </a>
+                </li>
+                {% if global.features.apps.trade_accounts %}
+                    <li>
+                        <a href="/account/trade-application">
+                            <i class="icon-warehouse" aria-hidden="true"></i>
+                            {{ t.account_dropdown_menu.a_trade_account_registration }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
+
+
+{% block header_currency %}
+
+    {% macro region_flag(path) %}
+        {% set country_code =  path|split('.net/')[1]|split('.')[0]|lower %}
+        {# regex = \[A-Z]{2}(?=\.png)\ #}
+        <span class="currency-flag">
+            <span class="flag {{ country_code }}" aria-hidden="true"></span>
+        </span>
+    {% endmacro %}
+
+    {% set global_currencies = [] %}
+
+    {% for item in global.currencies %}
+        {% set global_currencies = global_currencies|merge([item.id]) %}
+    {% endfor %}
+
+    <div class="header-currency">
+        <a class="header-currency-select float-right" data-toggle="currency-dropdown">
+            {{ t.header_currency_select.a_if_global_currency_country }}
+            <span class="show-for-large">{{ global.currency_country.name }}</span>
+            {{ t.header_currency_select.a_global_currency_symbol_raw }}
+        </a>
+        <div class="currency-dropdown dropdown-pane bottom right" id="currency-dropdown" data-dropdown data-v-offset="15" data-close-on-click="true">
+            <h3 class="currency-dropdown-heading text-center">
+                {{ t.currency_dropdown_heading.h3_delivery_country_amp_currency }}
+            </h3>
+            <p class="currency-dropdown-selected text-center small">
+                {{ t.currency_dropdown_selected.p_you_re_currenty_viewing }} <strong>{{ global.currency.name }} {{ global.currency.symbol|raw }}</strong>.<br>
+                Select a new currency below.
+            </p>
+            <ul class="currency-dropdown-list no-bullet text-left">
+                {% for country in global.currency_countries if country.current %}
+                    <li>
+                        <a href="{{ currency_url(country.currency_id, country.id) }}" class="active">
+                            {% if country.flag_url %}
+                                {{ _self.region_flag(country.flag_url) }}
+                            {% endif %}
+                            <span class="currency-region">{{ country.name }}</span>
+                            <span class="currency-symbol">{{ country.currency_name }} {{ country.currency_symbol|raw }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+                {% for country in global.currency_countries if country.name != global.currency_country.name and country.currency_id in global_currencies %}
+                    <li>
+                        <a href="{{ currency_url(country.currency_id, country.id) }}">
+                            {% if country.flag_url %}
+                                {{ _self.region_flag(country.flag_url) }}
+                            {% endif %}
+                            <span class="currency-region">{{ country.name }}</span>
+                            <span class="currency-symbol">{{ country.currency_name }} {{ country.currency_symbol|raw }}</span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block header_search %}
+    <div class="header-search hide" id="header-search" data-toggler=".hide">
+        <div class="row column">
+            <div class="header-search-inner">
+                <span class="header-search-inner-left">
+                    {{ theme.sw_icon('glass') }}
+                </span>
+                <form class="header-search-input-group input-group" action="/search/products" method="get">
+                    <input type="search" name="keywords" placeholder="Search" class="header-search-input input-group-field">
+                    <div class="input-group-button">
+                        <button type="submit" class="header-search-button button">Go</button>
+                    </div>
+                </form>
+                <button class="header-search-inner-right close-button" data-toggle="header-search">
+                    <span aria-hidden="true">{{ t.header_search_inner_right.span_times }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block header_logo %}
+    <a href="/" class="header-logo">
+        {% if global.business.logo_url %}
+            <img src="{{ global.business.logo_url }}" alt="{{ global.business.name }}" class="logo-image">
+        {% else %}
+            <span class="logo-text">
+                {{ global.business.name }}
+            </span>
+        {% endif %}
+    </a>
+{% endblock %}
+
+
+{% block header_navigation %}
+    <div class="header-nav-outer bg-shade">
+        <nav class="row column">
+            <div class="header-nav">
+                <button type="button" class="mobile-menu-toggle hide-for-large" data-toggle="offCanvasMobile">
+                    {{ theme.sw_icon('bars') }}
+                    Menu
+                </button>
+                <div class="header-mobile-right hide-for-large">
+                    <a class="header-mobile-basket"{% if gts.offcanvas_basket and global.current_path != '/checkout/basket' %} data-toggle="offCanvasBasket"{% else %} href="/checkout/basket"{% endif %}>
+                        {{ theme.sw_icon('shopping-bag', 'Shopping Basket') }}
+                        <span class="show-for-large">{{ t.show_for_large.span_shopping_basket }}</span>
+                        <span class="basket-count">{{ global.basket.items }}</span>
+                    </a>
+                    <button type="button" class="mobile-search-toggle" data-toggle="header-search">
+                        {{ theme.sw_icon('glass', 'Search') }}
+                    </button>
+                    {% if global.features.apps.currencies %}
+                        {% include 'partials/currency_dropdown.twig' with { 'size': 'small' } %}
+                    {% endif %}
+                </div>
+                {# Render main navigation #}
+                <div id="main-nav-wrapper" class="main-nav-wrapper{{ theme_config.nav_style == 1 ? ' click-drop' : '' }} show-for-large" data-toggler=".show-for-large">
+                    <ul class="main-nav vertical large-horizontal menu align-center"
+                        data-responsive-menu="accordion large-dropdown"
+                        data-close-on-click-inside
+                    >
+                        {# Render home link #}
+                        <li class="main-nav-home-link">
+                            <a href="/"{% if global.current_path == '/' %} class="active"{% endif %}>
+                                {{ t.active.a_home }}
+                            </a>
+                        </li>
+                        {# Render category links #}
+                        {% for category in global.categories|slice(0, category_limit|default(20)) %}
+                            <li{% if theme_config.nav_style == 1 %} data-id="{{ category.id }}" class="{{ category.categories ? 'parent-with-sub' }}"{% endif %}>
+                                <a href="{{ category.url }}" {% if category.url in global.current_url %}class="active" {% endif %}>
+                                    {{ category.title }}
+                                </a>
+                                {% if category.categories and not theme_config.nav_style == 1 %}
+                                    <ul class="menu vertical is-dropdown-submenu">
+                                        {% for subcategory in category.categories %}
+                                            <li>
+                                                <a href="{{ subcategory.url }}" {% if global.current_url == subcategory.url %}class="active" {% endif %}>
+                                                    {{ subcategory.title }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                        {% if global.categories|length > category_limit|default(20) %}
+                            <li>
+                                <a href="/categories">
+                                    {{ t[category.categories ? 'parent-with-sub' : 'default_key'].a_view_all }}
+                                </a>
+                            </li>
+                        {% endif %}
+                        {# Render custom links #}
+                        {% set add_list = global.theme.settings.list_category_add %}
+                        {% if add_list and add_list.links %}
+                            {% for link in add_list.links %}
+                                <li>
+                                    <a href="{{ link.url }}">
+                                        {{ link.title }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        {% endif %}
+                        {# Render brand links #}
+                        {% if global.brands %}
+                            <li{% if theme_config.nav_style == 1 %} data-id="brands" class="parent-with-sub"{% endif %}>
+                                <a href="/brands" {% if global.current_path == '/brands' %}class="active" {% endif %}>
+                                    {{ t.parent_with_sub.a_brands }}
+                                </a>
+                                {% if not theme_config.nav_style == 1 %}
+                                    <ul class="vertical menu is-dropdown-submenu">
+                                        {% for brand in global.brands|slice(0, brand_limit|default(20)) %}
+                                            <li>
+                                                <a href="{{ brand.url }}" {% if brand.url in global.current_path %}class="active" {% endif %}>
+                                                    {{ brand.title }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                        {% if global.brands|length > brand_limit|default(20) %}
+                                            <li>
+                                                <a href="/brands">
+                                                    {{ t.vertical.a_view_all }}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endif %}
+                        {# Render blog link #}
+                        {% if global.features.apps.blog %}
+                            <li>
+                                <a href="/blog"{% if global.current_path == '/blog' %} class="active"{% endif %}>
+                                    {{ t.active.a_blog }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    {{ block('sub_navigation') }}
+{% endblock %}
+
+
+{% block sub_navigation %}
+    {% if theme_config.nav_style == 1 %}
+        <div class="sub-nav-container show-for-large">
+            <div class="row column">
+                {% for category in global.categories|slice(0, category_limit|default(20)) if category.categories %}
+                    <ul class="no-bullet" data-id="{{ category.id }}" id="sub-{{ category.id }}" style="display:none;">
+                        {% for subcategory in category.categories %}
+                            <li>
+                                <a href="{{ subcategory.url }}" {% if global.current_url == subcategory.url %}class="active" {% endif %}>
+                                    {{ subcategory.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        <li>
+                            <a href="{{ category.url }}?all=1">
+                                {{ t.no_bullet.a_view_all }}
+                            </a>
+                        </li>
+                    </ul>
+                {% endfor %}
+                {% if global.brands %}
+                    <ul class="no-bullet" data-id="brands" style="display:none;">
+                        {% for brand in global.brands|slice(0, brand_limit|default(20)) %}
+                            <li>
+                                <a href="{{ brand.url }}" {% if brand.url in global.current_path %}class="active" {% endif %}>
+                                    {{ brand.title }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        {% if global.brands|length > brand_limit|default(20) %}
+                            <li>
+                                <a href="/brands">
+                                    {{ t.no_bullet.a_view_all_2 }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                {% endif %}
+                <span class="selection-triangle hide" aria-hidden="true"></span>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+

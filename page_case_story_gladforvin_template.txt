@@ -1,0 +1,573 @@
+{# Extend master template #}
+{% extends 'templates/master.twig' %}
+
+{% set bodyClass = 'case-storys' %}
+
+{% block content %}
+    <div class="content case-story" id="content">
+        {# sell everywhere heading image promo #}
+        <section class="heading-image bg-woodsmoke_black text-white">
+<div class="banner-overlay"></div>
+<div class="grid-container full v-center">
+<div class="grid-margin-x">
+<div class="medium-10 large-6 cell banner-text">
+<h1 class="heading-large line-height-medium">{{ t.heading_image.h1_glad_for_vin_s }}</h1>
+<p class="text-size-x-large lead">{{ t.heading_image.p_from_streamlined_navigation_to }}</p>
+</div>
+<div class="cell large-6 padding-top margin-top">
+<div class="mobile-arrow show-for-mobile">
+<a class="bounce" href="#main-section"></a>
+</div>
+</div>
+</div>
+</div>
+</section>
+        {# front and centre section #}
+        <section class="section-block" data-magellan-target="main-section" id="main-section">
+<div class="grid-container full">
+				{#<div class="large-12">
+					<div class="cs-section-mark">
+							Seamless interaction
+						</div>
+				</div> #}
+                <div class="grid-x grid-margin-x v-center-grid">
+<div class="cell large-6 align-self-middle">
+<h1 class="heading-midi margin-bottom">{{ t.heading_midi.h1_digital_transformation_journey }}</h1>
+<p class="text-size-larger text-dark_blue line-height-large margin-bottom-1">{{ t.text_size_larger.p_glad_for_vin_migrated }}</p>
+<p class="text-size-larger text-dark_blue line-height-large margin-bottom-1">{{ t.text_size_larger.p_their_goal_was_clear }}</p>
+<p class="text-size-larger text-dark_blue line-height-large margin-bottom-1 padding-bottom">{{ t.text_size_larger.p_by_combining_intuitive_navigation }}</p>
+<p class="text-size-larger text-dark_blue line-height-large margin-bottom-1 padding-bottom">{{ t.text_size_larger.p_crucially_the_solution_was }}</p>
+<p class="text-size-larger text-dark_blue line-height-large margin-bottom-1 padding-bottom">{{ t.text_size_larger.p_the_result_a_stronger }}</p>
+</div>
+<div class="cell large-5 large-offset-1">
+<div class="image-container">
+<img class="content-image border-radius-12 box-shadow" src="https://files.ecommercedns.uk/247297/9754670e01b26ad2f734f0e646044d58.png" title="Glad for Vin's Digital transformation journey"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="section-block section-bg-gray">
+<div class="grid-container full padding-top">
+<div class="grid-x grid-margin-x">
+<div class="cell large-6">
+<div class="cs-section-mark">
+							Key elements of Glad for Vin’s ShopWired solution
+						</div>
+</div>
+</div>
+<div class="grid-x grid-margin-x">
+<div class="cell large-5">
+<div class="item-box padding-bottom">
+<div class="inner">
+<h3 class="heading-small">{{ t.section_bg_gray.h3_structured_navigation }}</h3>
+<p class="text-dark_blue text-size-larger line-height-medium">{{ t.section_bg_gray.p_customers_can_browse_by }}</p>
+</div>
+</div>
+</div>
+<div class="cell large-5 large-offset-1">
+<div class="item-box padding-bottom">
+<div class="inner">
+<h2 class="heading-small">{{ t.section_bg_gray.h2_content_rich_product_pages }}</h2>
+<p class="text-dark_blue text-size-larger line-height-medium solo">{{ t.section_bg_gray.p_each_wine_features_detailed }}</p>
+</div>
+</div>
+</div>
+</div>
+<div class="grid-x grid-margin-x">
+<div class="cell large-5">
+<div class="item-box padding-bottom">
+<div class="inner">
+<h2 class="heading-small">{{ t.section_bg_gray.h2_seo_friendly_product_setup }}</h2>
+<p class="text-dark_blue text-size-larger line-height-medium">{{ t.section_bg_gray.p_shopwired_s_built_in }}</p>
+</div>
+</div>
+</div>
+<div class="cell large-5 large-offset-1">
+<div class="item-box padding-bottom">
+<div class="inner">
+<h2 class="heading-small">{{ t.section_bg_gray.h2_seamless_system_integration }}</h2>
+<p class="text-dark_blue text-size-larger line-height-medium">{{ t.section_bg_gray.p_integration_with_their_point }}</p>
+</div>
+</div>
+</div>
+</div>
+<div class="grid-x grid-margin-x">
+<div class="cell large-5">
+<div class="item-box padding-bottom">
+<div class="inner">
+<h2 class="heading-small">{{ t.section_bg_gray.h2_self_managed_content }}</h2>
+<p class="text-dark_blue text-size-larger line-height-medium">{{ t.section_bg_gray.p_the_team_now_creates }}</p>
+</div>
+</div>
+</div>
+</div>
+				 {# <div class="grid-x grid-margin-x grid-padding-x mt-30 icon-section padding-top">
+                  
+                    <div class="cell medium-4">
+                        <div class="item-box padding-bottom">
+                           
+                           <div class="inner text-center">
+							   	<img src="https://files.ecommercedns.uk/247297/f76935d7a528fd54f908199238edbc1b.png" title="Revenue + DKK 500.000.000" class="cs-icon padding-bottom padding-top" />
+
+                                <h3 class="heading-small-icons">
+                                    +300% increase in online sales
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+					 <div class="cell medium-4">
+                        <div class="item-box padding-bottom">
+                         
+                            <div class="inner text-center">
+								<img src="https://files.ecommercedns.uk/247297/a27bedaca652eb60e77b24170af8085e.png" title="Selling in +24 countries" class="cs-icon padding-bottom padding-top" />
+
+                                <h3 class="heading-small-icons">
+                                    Top organic Google rankings 
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cell medium-4">
+                        <div class="item-box padding-bottom">
+                       
+                           <div class="inner text-center">
+							  <img src="https://files.ecommercedns.uk/247297/b7cc6250cf491f88159e60b7778deae5.png" title=" +200 products" class="cs-icon padding-bottom padding-top" />
+
+                                <h3 class="heading-small-icons">
+                                    Content and product pages managed 100% in-house
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				<div class="grid-x grid-margin-x">
+                    <div class="cell large-12 ">
+						<div class="results-text">
+							<em>Glad for Vin’s journey shows how thoughtful content, intuitive navigation and built-in SEO tools can drive real commercial results.</em>
+						</div>
+                
+                    </div>
+              
+                </div> #}
+            </div>
+</section>
+<section class="section-block bg-green-10">
+<div class="grid-container full padding-top text-center">
+<div class="grid-x grid-margin-x">
+<div class="cell large-12">
+<div class="cs-section-mark">
+							Results that matter
+						</div>
+</div>
+</div>
+<div class="grid-x grid-margin-x">
+<div class="cell large-12">
+<h2>{{ t.bg_green_10.h2_what_glad_for_vin }}</h2>
+</div>
+</div>
+<div class="grid-x grid-margin-x grid-padding-x mt-30 icon-section padding-top">
+<div class="cell medium-2 medium-offset-1">
+<div class="item-box padding-bottom">
+<div class="inner text-center">
+<img class="cs-icon padding-bottom padding-top" src="https://files.ecommercedns.uk/247297/f76935d7a528fd54f908199238edbc1b.png" title="+300% increase in online sales"/>
+<h3 class="heading-small-icons">{{ t.bg_green_10.h3_300_increase_in_online }}</h3>
+</div>
+</div>
+</div>
+<div class="cell medium-2">
+<div class="item-box padding-bottom">
+<div class="inner text-center">
+<img class="cs-icon padding-bottom padding-top" src="https://files.ecommercedns.uk/247297/a27bedaca652eb60e77b24170af8085e.png" title="Top organic Google rankings "/>
+<h3 class="heading-small-icons">{{ t.bg_green_10.h3_top_organic_google_rankings }}</h3>
+</div>
+</div>
+</div>
+<div class="cell medium-2">
+<div class="item-box padding-bottom">
+<div class="inner text-center">
+<img class="cs-icon padding-bottom padding-top" src="https://files.ecommercedns.uk/247297/86993e1588ee34679ff1c69d30e995d6.png" title="Better in-store experience through cross-channel integration"/>
+<h3 class="heading-small-icons">{{ t.bg_green_10.h3_better_in_store_experience }}</h3>
+</div>
+</div>
+</div>
+<div class="cell medium-2">
+<div class="item-box padding-bottom">
+<div class="inner text-center">
+<img class="cs-icon padding-bottom padding-top" src="https://files.ecommercedns.uk/247297/0cd9b19a1db501ae27fa09deb5868892.png" title=" Higher engagement and ease of use"/>
+<h3 class="heading-small-icons">{{ t.bg_green_10.h3_higher_engagement_and_ease }}</h3>
+</div>
+</div>
+</div>
+<div class="cell medium-2">
+<div class="item-box padding-bottom">
+<div class="inner text-center">
+<img class="cs-icon padding-bottom padding-top" src="https://files.ecommercedns.uk/247297/b7cc6250cf491f88159e60b7778deae5.png" title="100% in-house content management"/>
+<h3 class="heading-small-icons">{{ t.bg_green_10.h3_100_in_house_content }}</h3>
+</div>
+</div>
+</div>
+</div>
+<div class="grid-x grid-margin-x">
+<div class="cell large-12">
+<div class="results-text">
+<em>By combining digital improvements with a better customer experience, Glad for Vin has strengthened both their online presence and their in-store service.</em>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="section-block">
+<div class="grid-container full">
+<div class="grid-x grid-margin-x v-center-grid">
+<div class="cell large-12 text-center">
+<h2 class="heading-small padding-bottom">{{ t.heading_small.h2_interested_in_our_solution }}</h2>
+<p class="text-size-larger">{{ t.text_size_larger.p_chat_with_us_or }}</p>
+<a class="button mod-razzmatazz_pink try-btn" href="/contact-us">{{ t.button.a_book_a_meeting }}</a>
+</div>
+</div>
+</div>
+</section>
+</div>
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+		html {
+		  scroll-behavior: smooth;
+		}
+		
+        .display-box.sell-more {
+            background-color: #e6f6f4;
+        }
+        .heading-image {
+/*             background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center 2vh; */
+/*             padding-bottom: 40px;
+            padding-top: 30px; */
+			padding: 0;
+/* 			height: 40vh; */
+			height: 540px;
+        }
+		
+		#video-container {
+			background-image: url('https://files.ecommercedns.uk/247297/5967585494295e09021d4a3698d407aa.png');
+			    max-width: 600px;
+				margin: auto;
+				padding: 40px 60px 0px 40px;
+				background-repeat: no-repeat;
+				background-size: contain;
+				margin-top: 30px;
+		}
+		
+		video {
+			border-radius: 5px;
+		}
+		
+		section.heading-image {
+			background-image: url('https://files.ecommercedns.uk/247297/24a39847697c1c25cf63d2ca4400655e.jpg');
+			background-size: cover;
+			background-position: bottom;
+			position: relative;
+		}
+		
+		.heading-small-icons {
+			    font-weight: 500;
+    			font-size: 1.3rem;
+		}
+		
+		.cs-icon {
+			max-width: 64px;
+		}
+		
+		.section-bg-gray {
+			background-color: #F6F8FA;
+		}
+		
+		.heading-midi {
+			font-size: 32px;
+			font-size: 3rem;
+		}
+		
+				/* 	Common */
+		.full-height {
+			height: 100%
+		}
+		
+		p.lead {
+			font-size: 1.8rem;
+    		font-weight: 500;
+		}
+		
+		.heading-image p.lead {
+			margin-bottom: 0px;
+		}
+		
+		.banner-overlay {
+			background-color: rgba(0, 0, 0, 0.5);
+			top: 0;
+			left: 0;
+			height: 100%;
+			width: 100%;
+			position: absolute;
+		}
+		
+		.banner-text p, .banner-text h1 {
+			max-width: 740px;
+		}
+		
+		.cs-section-mark {
+			font-size: 1rem;
+			font-weight: 600;
+			color: #fff;
+			display: inline-block;
+			background-color: #f10257;
+			border-radius: 3px;
+			padding: 2px 7px;
+			margin-bottom: 2rem;
+		}
+		
+	
+		
+		.mt-30 {
+			margin-top: 30px;
+		}
+		
+		.icon-section {
+			//max-width: 860px;
+			//margin: 30px auto 0;
+		}
+		
+		.text-italic {
+			font-style: italic;
+		}
+		
+		.video-container {
+		 	width: 100%;
+   		 	height: 100%;
+		  	position: relative;
+		  	overflow: hidden;
+
+		}
+		
+		#background-video {
+		  	object-fit: cover; 
+		  	position: absolute;
+		  	height: 100%;
+		  	width: 100%;
+		  	top: 0;
+		  	left: 0;
+			object-position: 50% 0%;
+		}
+		
+		.header-text-overlay {
+			margin-top: 50px;
+		}
+		
+		.mobile-arrow {
+			z-index: 9999;
+			position: absolute;
+/* 			display: block; */
+			//bottom: -240px;
+			position: relative;
+			width: 100%;
+			text-align: center;
+		}
+		
+		.mobile-arrow i {
+			color: #fff;
+			display: block;
+			font-size: 32px;
+			opacity: 0.80;
+			-webkit-transform: rotate(90deg);
+			-moz-transform: rotate(90deg);
+			-ms-transform: rotate(90deg);
+			-o-transform: rotate(90deg);
+			transform: rotate(90deg);
+		}
+		
+		.mobile-arrow a {
+			    font-size: 22px;
+				margin: auto;
+				display: block;
+		}
+		
+		.mobile-arrow a:before {
+			content: "";
+			font-family: sw-icons!important;
+			font-size: 1.5em;
+			left: 1rem;
+			margin-top: -0.75rem;
+			color: #fff;
+		}
+		
+		.show-for-mobile {
+			display: none;
+		}
+		
+		.bg-green-10 {
+			background-color: rgba(24, 61, 64, 0.1);
+		}
+		
+		.border-radius-12 {
+			border-radius: 12px;
+		}
+		
+		.box-shadow {
+			box-shadow: 2px 2px 20px 0 rgba(0, 0, 0, .1);
+		}
+		
+		.results-text {
+			max-width: 760px;
+			margin: 2rem auto;
+			text-align: center;
+			font-size: 20px;
+		}
+		
+		.sub-heading {
+			font-size: 20px;
+		}
+		
+		@media screen and (max-width: 640px) {
+			.show-for-mobile {
+				display: block;
+			}
+			
+		}
+        @media screen and (max-width: 63.9375em) {
+			
+			#video-container {
+				margin-top: 60px;
+			}
+			
+			.cs-icon {
+/* 				margin: 30px 0; */
+				max-width: 48px;
+			}
+			
+			.hide-for-mobile {
+				display: none;
+			}
+			
+			.solo.padding-top {
+				padding-top: 0;
+			}
+			
+			p.lead {
+				font-size: 1.2rem;
+			}
+			
+			.section-bg-gray p.padding-top {
+				padding-top: 0px;
+			}
+			
+			.icon-section h3.heading-small-icons {
+				font-size: 0.9rem;
+				line-height: 150%;
+				font-weight: 700;
+			}
+			
+			.icon-section .cell {
+				padding: 0 !important;
+			}
+			.header-text-overlay {
+				margin-top: 0;
+			}
+			
+			
+        }
+		
+		@media screen and (min-width: 75em) {
+			.content {
+				min-height: 400px;
+			}
+		}
+		
+		
+		@media screen and (max-width: 1440px) {
+			  	.heading-image {
+/* 					height:360px; */
+				}
+
+		}
+		
+		@media screen and (max-width: 80em) {
+			  	.v-center-grid {
+					align-items: center;
+				}
+
+		}
+		@media screen and (min-width: 75em) {
+			  #video-container {
+				margin-bottom: -60px;
+			}
+			  
+		}
+        @media screen and (min-width: 64em) {
+            .heading-image {
+                padding-bottom: 0;
+            }
+            .display-box.upselling {
+                padding-left: 0;
+            }
+            .marketing-section .display-box {
+                max-width: 330px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+			
+		
+			
+        }
+		
+/* 		Animation */
+		
+		.bounce {
+		  animation: bounce 2s ease infinite;
+		}
+		@keyframes bounce {
+			0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+			40% {transform: translateY(-7px);}
+			60% {transform: translateY(-5px);}
+		}
+
+
+		
+
+		
+    </style>
+		
+		
+{% endblock %}
+		
+{% block scripts %}
+    {{ parent() }}
+		
+		<script>
+			$( document ).ready(function() {
+				
+				const urlParams = new URLSearchParams(window.location.search);
+
+				const video = urlParams.get('video');
+
+
+				if (video == 'show') {
+					
+					 $('html, body').animate({
+						   scrollTop: $("#video-container").offset().top-100
+						}, 500);
+					
+					
+					$('#jvideo').trigger('play'); 
+					
+				}
+				
+				
+				
+			});
+		</script>
+		
+{% endblock %}

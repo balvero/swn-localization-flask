@@ -1,0 +1,469 @@
+{# Extend master template #}
+{% extends 'templates/master.twig' %}
+
+{% set bodyClass = 'case-story' %}
+
+{% block content %}
+    <div class="content case-story" id="content">
+        {# sell everywhere heading image promo #}
+        <section class="heading-image bg-woodsmoke_black text-white">
+<div class="video-container">
+<video autoplay="autoplay" id="background-video" loop="" muted="" playsinline="">
+<source src="https://files.ecommercedns.uk/247297/88da3daf61899e2d2b5a8c9db241f55e.mp4" type="video/mp4">
+</source></video>
+<div class="banner-overlay"></div>
+<div class="grid-container full v-center header-text-overlay">
+<div class="grid-margin-x v-center">
+<div class="medium-10 large-6 cell">
+<h1 class="heading-large line-height-medium">{{ t.heading_image.h1_easyfood }}</h1>
+<p class="text-size-x-large lead">{{ t.heading_image.p_transforming_customer_connections }}<br/>{{ t.heading_image.p_easyfood_s_digital_journey }}</p>
+</div>
+<div class="cell large-6 large-offset-1 show-for-large">
+<div class="image-container v-center">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mobile-arrow show-for-mobile">
+<a class="bounce" href="#main-section"></a>
+</div>
+</section>
+        {# front and centre section #}
+        <section class="section-block" data-magellan-target="main-section" id="main-section">
+<div class="grid-container full">
+<div class="large-12">
+<div class="cs-section-mark">
+							Seamless interaction
+						</div>
+</div>
+<div class="grid-x grid-margin-x v-center-grid">
+<div class="cell large-6">
+<h1 class="heading-midi margin-bottom">{{ t.heading_midi.h1_easyfood_s_targeted_interface }}</h1>
+<p class="text-size-larger text-dark_blue line-height-large margin-bottom-1">{{ t.text_size_larger.p_easyfood_s_customized_e }}</p>
+<p class="text-size-larger text-dark_blue line-height-large margin-bottom-1">{{ t.text_size_larger.p_simultaneously_easyfood_gains_valuable }}</p>
+<p class="text-size-larger text-dark_blue line-height-large margin-bottom-1 padding-bottom">{{ t.text_size_larger.p_this_innovative_approach_seamlessly }}</p>
+</div>
+<div class="cell large-5 large-offset-1">
+<div class="image-container">
+<img class="content-image" src="https://files.ecommercedns.uk/247297/70c43f0da32e1bb69621def207b6bbbe.png" title="Easyfood's targeted interface: Elevating trade fair and event experiences"/>
+</div>
+</div>
+</div>
+<div class="cell large12 text-center">
+<div id="video-container">
+<video controls="" height="100%" id="jvideo" poster="https://files.ecommercedns.uk/247297/a627adac4963961f1c898c4a1b61cd31.png" width="100%">
+<source id="mp4_src" src="https://shopwired-dk.s3.eu-north-1.amazonaws.com/Accounts/ShopWired+Nordic/SNW-85/SWN-85-ENG.mp4" type="video/mp4">
+<source id="webm_src" src="https://shopwired-dk.s3.eu-north-1.amazonaws.com/Accounts/ShopWired+Nordic/SNW-85/swn_85.webm" type="video/webm"/>
+						   Your browser does not support the video tag.
+					</source></video>
+<p class="text-dark_blue line-height-medium solo padding-top text-italic">{{ t.text_dark_blue.p_enhancing_customer_experience_and }}</p>
+</div>
+</div>
+</div>
+</section>
+<section class="section-block bg-selago_purple mt-30">
+<div class="grid-container full">
+<div class="large-12">
+<div class="cs-section-mark">
+							Easyfood's digital transformation journey
+						</div>
+</div>
+<div class="grid-x grid-margin-x v-center-grid">
+<div class="cell large-6">
+<h1 class="heading-midi margin-bottom">{{ t.bg_selago_purple.h1_innovation_and_customer_engagement }}</h1>
+<p class="text-size-larger text-dark_blue line-height-large margin-bottom-1">{{ t.bg_selago_purple.p_easyfood_part_of_the }}</p>
+<p class="text-size-larger text-dark_blue line-height-large margin-bottom-1">{{ t.bg_selago_purple.p_fueled_by_innovation_and }}</p>
+<p class="text-size-larger text-dark_blue line-height-large margin-bottom-1 padding-bottom">{{ t.bg_selago_purple.p_their_ability_to_swiftly }}</p>
+</div>
+<div class="cell large-5 large-offset-1">
+<div class="image-container">
+<img class="content-image" src="https://files.ecommercedns.uk/247297/c82a16955dee9c0416890fb79e5d746e.png" title="Innovation and customer engagement drive Easyfood's success"/>
+</div>
+</div>
+</div>
+<div class="grid-x grid-margin-x grid-padding-x mt-30 icon-section">
+<div class="cell small-4">
+<div class="item-box padding-bottom">
+<div class="inner text-center">
+<img class="cs-icon padding-bottom padding-top" src="https://files.ecommercedns.uk/247297/72fc3808021fa5ab5a8b3f36c7471749.png" title="Selling in +24 countries"/>
+<h3 class="heading-small-icons">{{ t.bg_selago_purple.h3_selling_in_24_countries }}</h3>
+</div>
+</div>
+</div>
+<div class="cell small-4">
+<div class="item-box padding-bottom">
+<div class="inner text-center">
+<img class="cs-icon padding-bottom padding-top" src="https://files.ecommercedns.uk/247297/f76935d7a528fd54f908199238edbc1b.png" title="Revenue + DKK 500.000.000"/>
+<h3 class="heading-small-icons">{{ t.bg_selago_purple.h3_revenue_dkk_500_000 }}</h3>
+</div>
+</div>
+</div>
+<div class="cell small-4">
+<div class="item-box padding-bottom">
+<div class="inner text-center">
+<img class="cs-icon padding-bottom padding-top" src="https://files.ecommercedns.uk/247297/d592434b9c085496c16b9cfaa7485d79.png" title=" +200 products"/>
+<h3 class="heading-small-icons">{{ t.bg_selago_purple.h3_200_products }}</h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="section-block section-bg-gray">
+<div class="grid-container full padding-top">
+<div class="grid-x grid-margin-x">
+<div class="cell large-6">
+<div class="cs-section-mark">
+							Key elements of Easyfood's ShopWired solution
+						</div>
+</div>
+</div>
+<div class="grid-x grid-margin-x">
+<div class="cell large-5">
+<div class="item-box padding-bottom">
+<div class="inner">
+<h3 class="heading-small">{{ t.section_bg_gray.h3_tailored_user_interface }}</h3>
+<p class="text-dark_blue text-size-larger line-height-medium">{{ t.section_bg_gray.p_the_customized_user_interface }}</p>
+</div>
+</div>
+</div>
+<div class="cell large-5 large-offset-1">
+<div class="item-box padding-bottom">
+<div class="inner">
+<h2 class="heading-small">{{ t.section_bg_gray.h2_streamlined_links_to_partner }}</h2>
+<p class="text-dark_blue text-size-larger line-height-medium solo">{{ t.section_bg_gray.p_convenient_links_to_partner }}</p>
+</div>
+</div>
+</div>
+</div>
+<div class="grid-x grid-margin-x">
+<div class="cell large-5">
+<div class="item-box padding-bottom">
+<div class="inner">
+<h2 class="heading-small">{{ t.section_bg_gray.h2_exclusive_benefits_for_registered }}</h2>
+<p class="text-dark_blue text-size-larger line-height-medium">{{ t.section_bg_gray.p_registered_users_can_easily }}</p>
+</div>
+</div>
+</div>
+<div class="cell large-5 large-offset-1">
+<div class="item-box padding-bottom">
+<div class="inner">
+<h2 class="heading-small">{{ t.section_bg_gray.h2_enhanced_trade_fair_and }}</h2>
+<p class="text-dark_blue text-size-larger line-height-medium">{{ t.section_bg_gray.p_leveraging_easyfood_s_e }}</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="section-block">
+<div class="grid-container full">
+<div class="grid-x grid-margin-x v-center-grid">
+<div class="cell large-12 text-center">
+<h2 class="heading-small padding-bottom">{{ t.heading_small.h2_interested_in_our_solution }}</h2>
+<p class="text-size-larger">{{ t.text_size_larger.p_chat_with_us_or }}</p>
+<a class="button mod-razzmatazz_pink try-btn" href="/contact-us">{{ t.button.a_book_a_meeting }}</a>
+</div>
+</div>
+</div>
+</section>
+
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+		html {
+		  scroll-behavior: smooth;
+		}
+		
+        .display-box.sell-more {
+            background-color: #e6f6f4;
+        }
+        .heading-image {
+/*             background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center 2vh; */
+/*             padding-bottom: 40px;
+            padding-top: 30px; */
+			padding: 0;
+/* 			height: 40vh; */
+			height: 540px;
+        }
+		
+		#video-container {
+			background-image: url('https://files.ecommercedns.uk/247297/5967585494295e09021d4a3698d407aa.png');
+			    max-width: 600px;
+				margin: auto;
+				padding: 40px 60px 0px 40px;
+				background-repeat: no-repeat;
+				background-size: contain;
+				margin-top: 30px;
+		}
+		
+		video {
+			border-radius: 5px;
+		}
+		
+		.heading-small-icons {
+			    font-weight: 500;
+    			font-size: 1.3rem;
+		}
+		
+		.cs-icon {
+			max-width: 64px;
+		}
+		
+		.section-bg-gray {
+			background-color: #F6F8FA;
+		}
+		
+		.heading-midi {
+			font-size: 32px;
+			font-size: 3rem;
+		}
+		
+				/* 	Common */
+		.full-height {
+			height: 100%
+		}
+		
+		p.lead {
+			font-size: 1.8rem;
+    		font-weight: 500;
+		}
+		
+		.banner-overlay {
+			background-color: rgba(0, 0, 0, 0.5);
+			top: 0;
+			left: 0;
+			height: 100vh;
+			width: 100%;
+			position: absolute;
+		}
+		
+		.cs-section-mark {
+			font-size: 1rem;
+			font-weight: 600;
+			color: #fff;
+			display: inline-block;
+			background-color: #f10257;
+			border-radius: 3px;
+			padding: 2px 7px;
+			margin-bottom: 2rem;
+		}
+		
+	
+		
+		.mt-30 {
+			margin-top: 30px;
+		}
+		
+		.icon-section {
+			max-width: 860px;
+			margin: 30px auto 0;
+		}
+		
+		.text-italic {
+			font-style: italic;
+		}
+		
+		.video-container {
+		 	width: 100%;
+   		 	height: 100%;
+		  	position: relative;
+		  	overflow: hidden;
+
+		}
+		
+		#background-video {
+		  	object-fit: cover; 
+		  	position: absolute;
+		  	height: 100%;
+		  	width: 100%;
+		  	top: 0;
+		  	left: 0;
+			object-position: 50% 0%;
+		}
+		
+		.header-text-overlay {
+			margin-top: 50px;
+		}
+		
+		.mobile-arrow {
+			z-index: 9999;
+			position: absolute;
+/* 			display: block; */
+			bottom: 160px;
+			position: relative;
+			width: 100%;
+			text-align: center;
+		}
+		
+		.mobile-arrow i {
+			color: #fff;
+			display: block;
+			font-size: 32px;
+			opacity: 0.80;
+			-webkit-transform: rotate(90deg);
+			-moz-transform: rotate(90deg);
+			-ms-transform: rotate(90deg);
+			-o-transform: rotate(90deg);
+			transform: rotate(90deg);
+		}
+		
+		.mobile-arrow a {
+			    font-size: 22px;
+				margin: auto;
+				display: block;
+		}
+		
+		.mobile-arrow a:before {
+			content: "";
+			font-family: sw-icons!important;
+			font-size: 1.5em;
+			left: 1rem;
+			margin-top: -0.75rem;
+			color: #fff;
+		}
+		
+		.show-for-mobile {
+			display: none;
+		}
+		
+		@media screen and (max-width: 640px) {
+			.show-for-mobile {
+				display: block;
+			}
+			
+		}
+        @media screen and (max-width: 63.9375em) {
+			
+			#video-container {
+				margin-top: 60px;
+			}
+			
+			.cs-icon {
+/* 				margin: 30px 0; */
+				max-width: 48px;
+			}
+			
+			.hide-for-mobile {
+				display: none;
+			}
+			
+			.solo.padding-top {
+				padding-top: 0;
+			}
+			
+			p.lead {
+				font-size: 1.2rem;
+			}
+			
+			.section-bg-gray p.padding-top {
+				padding-top: 0px;
+			}
+			
+			.icon-section h3.heading-small-icons {
+				font-size: 0.9rem;
+				line-height: 150%;
+				font-weight: 700;
+			}
+			
+			.icon-section .cell {
+				padding: 0 !important;
+			}
+			.header-text-overlay {
+				margin-top: 0;
+			}
+			
+			
+        }
+		
+		
+		@media screen and (max-width: 1440px) {
+			  	.heading-image {
+/* 					height:360px; */
+				}
+
+		}
+		
+		@media screen and (max-width: 80em) {
+			  	.v-center-grid {
+					align-items: center;
+				}
+
+		}
+		@media screen and (min-width: 75em) {
+			  #video-container {
+				margin-bottom: -60px;
+			}
+			  
+		}
+        @media screen and (min-width: 64em) {
+            .heading-image {
+                padding-bottom: 0;
+            }
+            .display-box.upselling {
+                padding-left: 0;
+            }
+            .marketing-section .display-box {
+                max-width: 330px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+			
+		
+			
+        }
+		
+/* 		Animation */
+		
+		.bounce {
+		  animation: bounce 2s ease infinite;
+		}
+		@keyframes bounce {
+			0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+			40% {transform: translateY(-7px);}
+			60% {transform: translateY(-5px);}
+		}
+
+
+		
+
+		
+    </style>
+		
+		
+{% endblock %}
+		
+{% block scripts %}
+    {{ parent() }}
+		
+		<script>
+			$( document ).ready(function() {
+				
+				const urlParams = new URLSearchParams(window.location.search);
+
+				const video = urlParams.get('video');
+
+
+				if (video == 'show') {
+					
+					 $('html, body').animate({
+						   scrollTop: $("#video-container").offset().top-100
+						}, 500);
+					
+					
+					$('#jvideo').trigger('play'); 
+					
+				}
+				
+				
+				
+			});
+		</script>
+		
+{% endblock %}</div>

@@ -1,0 +1,487 @@
+{# Extend master template #}
+{% extends 'templates/master.twig' %}
+
+{% set bodyClass = 'header-mid_grey' %}
+{% set adjacent_links = 4 %}
+{% set low_show = total_pages &lt; (current_page + adjacent_links) ? total_pages - 8 : current_page &gt; adjacent_links ? (current_page - adjacent_links) : 1 %}
+{% set high_show = current_page &lt; (adjacent_links + 1) ? 9 : (current_page + adjacent_links) %}
+{% set global_posts = blog_posts(99) %}
+
+
+{% block content %}
+    <div class="content blog-page" id="content">
+<div class="heading-section section-block-medium bg-mid_grey text-center">
+<div class="grid-container0 full">
+          
+				{% if global.current_path == '/blog' %}
+					 <h1 class="heading-large">{{ t.heading_large.h1_ecommerce_tips_industry_news }}<br class="show-for-large"/></h1>
+				{% elseif global.current_path == '/blog/category/b2b-ecommerce' %}
+					<h1 class="heading-large category-title" style="font-size: 32px; max-width: 960px;">{{ t.heading_large.h1_delve_into_b2b_ecommerce }}</h1>
+<div class="subheader bg-sw-blue text-white">
+<div class="grid-container full">
+<div class="grid-x inner">
+<div class="cell large-8 large-offset-1 text-left">
+									Discover how ShopWired can transform your B2B Ecommerce experience
+
+								</div>
+<div class="cell large-2 text-center">
+<a class="button small-expanded mod-razzmatazz_pink" href="/b2b">{{ t.button.a_learn_more }}</a>
+</div>
+</div>
+</div>
+</div>
+				{% elseif global.current_path == '/blog/category/ecommerce' %}
+					<h1 class="heading-large category-title">{{ t.heading_large.h1_mastering_ecommerce_strategies_trends }}</h1>
+<div class="subheader bg-sw-blue text-white">
+<div class="grid-container full">
+<div class="grid-x inner">
+<div class="cell large-8 large-offset-1 text-left">
+									Unlock the potential of your online store with ShopWired's comprehensive ecommerce solutions. 
+								</div>
+<div class="cell large-2 text-center">
+<a class="button small-expanded mod-razzmatazz_pink" href="/">{{ t.button.a_discover_more }}</a>
+</div>
+</div>
+</div>
+</div>
+				{% elseif global.current_path == '/blog/category/ecommerce-business-management' %}
+					<h1 class="heading-large category-title">{{ t.heading_large.h1_unlock_the_secrets_of }}</h1>
+<div class="subheader bg-sw-blue text-white">
+<div class="grid-container full">
+<div class="grid-x inner">
+<div class="cell large-8 large-offset-1 text-left">
+									Sign up for free and discover how ShopWired can revolutionize your ecommerce business. 
+								</div>
+<div class="cell large-2 text-center">
+<a class="button small-expanded mod-razzmatazz_pink" href="https://admin.myshopwired.uk/create">{{ t.button.a_explore_now }}</a>
+</div>
+</div>
+</div>
+</div>
+				{% elseif global.current_path == '/blog/category/marketing' %}
+					<h1 class="heading-large category-title">{{ t.heading_large.h1_discover_effective_ecommerce_marketing }}</h1>
+<div class="subheader bg-sw-blue text-white">
+<div class="grid-container full">
+<div class="grid-x inner">
+<div class="cell large-8 large-offset-1 text-left">
+									Unlock the potential of your online store with ShopWired's comprehensive ecommerce solutions. 
+								</div>
+<div class="cell large-2 text-center">
+<a class="button small-expanded mod-razzmatazz_pink" href="/marketing-tools">{{ t.button.a_discover_more_2 }}</a>
+</div>
+</div>
+</div>
+</div>
+				{% else %}
+				      <h1 class="heading-large">{{ t.heading_large.h1_ecommerce_tips_industry_news_2 }}<br class="show-for-large"/></h1>
+				{%endif%}
+            </div>
+</div>
+<section class="section-block category-slider-section bg-light_grey {{ global.current_path == '/blog' ? '':'hide'}}">
+<div class="grid-container full">
+<div class="text-left">
+<h3 class="pl-40">{{ t.category_slider_section.h3_navigate_by_interest }}</h3>
+</div>
+<div class="cell text-center">
+       
+
+                    {% set features_slider = {
+                        infinite: true,
+                        autoplay: false,
+                        slidesToShow: 4,
+                        responsive: [
+                            {
+                                breakpoint: 1023,
+                                settings: {
+                                    slidesToShow: 2
+                                }
+                            },
+                            {
+                                breakpoint: 639,
+                                settings: {
+                                    slidesToShow: 1
+                                }
+                            }
+                        ],
+                        prevArrow: '<button class="slick-prev prev"><svg viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"></path></svg></button>',
+                        nextArrow: '<button class="slick-next next"><svg viewbox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"></path></svg></button>'
+                    } %}
+					
+					{% set quick_slider = {
+                        infinite: true,
+						slidesToShow: 1,
+                        autoplay: true,
+						vertical: true,
+                        autoplaySpeed: 3000,
+						pauseOnHover: false,
+						dots: false,
+						arrows: false
+                    } %}
+
+                    <div class="features-slider" data-equalize-by-row="true" data-equalize-on="medium" data-equalizer="" data-slick="{{ features_slider|json_encode }}">
+                        {# slides #}
+						<div class="features-slider-item" data-equalizer-watch="">
+<img src="{{ asset_url('images/b2b.jpg')}}"/>
+<div class="image-overlay"></div>
+<a href="/blog/category/b2b-ecommerce"><div class="content">
+<h2 class="padding-top margin-bottom">{{ t.category_slider_section.h2_b2b_ecommerce }}</h2>
+<p class="line-height-large">{{ t.category_slider_section.p_stay_ahead_in_the }}</p>
+</div>
+</a>
+</div>
+<div class="features-slider-item" data-equalizer-watch="">
+<img src="{{ asset_url('images/ecommerce.jpg')}}"/>
+<div class="image-overlay"></div>
+<a href="/blog/category/ecommerce"><div class="content">
+<h2 class="padding-top margin-bottom">{{ t.category_slider_section.h2_ecommerce }}</h2>
+<p class="line-height-large">{{ t.category_slider_section.p_discover_the_latest_in }}</p>
+</div>
+</a>
+</div>
+<div class="features-slider-item" data-equalizer-watch="">
+<img src="{{ asset_url('images/marketing.jpg')}}"/>
+<div class="image-overlay"></div>
+<a href="/blog/category/marketing"><div class="content">
+<h2 class="padding-top margin-bottom">{{ t.category_slider_section.h2_marketing }}</h2>
+<p class="line-height-large">{{ t.category_slider_section.p_explore_insights_and_strategies }}</p>
+</div>
+</a>
+</div>
+<div class="features-slider-item" data-equalizer-watch="">
+<img src="{{ asset_url('images/management.jpg')}}"/>
+<div class="image-overlay"></div>
+<a href="/blog/category/ecommerce-business-management"><div class="content">
+<h2 class="padding-top margin-bottom">{{ t.category_slider_section.h2_ecommerce_business_management }}</h2>
+<p class="line-height-large">{{ t.category_slider_section.p_dive_into_effective_ecommerce }}</p>
+</div>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="blog-posts bg-light_grey section-block-medium">
+<div class="grid-container full">
+                {# blog search form #}
+                <form action="/blog" class="blog-search margin-bottom-3" method="get">
+<div class="input-group">
+<input class="input-group-field placehold-mod bg-white" name="keywords" placeholder="Search our blog..." type="text" value="{{ keywords }}"/>
+<div class="input-group-button">
+<button class="button mod-razzmatazz_pink" type="submit">{{ theme.sw_icon('glass', 'Search') }}</button>
+</div>
+</div>
+</form>
+                {# filter dropdown #}
+                <div class="blog-filter-container margin-bottom-3">
+<div class="grid-x">
+<div class="breadcrumbs {{ global.current_path == '/blog' ? 'hide':''}}">
+<a href="/blog">{{ t.blog_posts.a_articles }}</a>    &gt;   
+							{% for cat in categories %}
+                                {% if cat.url == global.current_path %}
+                                    {% set selected_cat = cat.name %}
+									{{cat.name}}
+                                {% endif %}
+                            {% endfor %}
+					
+						</div>
+                        {% if categories %}
+                            {% set selected_cat = 'All' %}
+                            {% for cat in categories %}
+                                {% if cat.url == global.current_path %}
+                                    {% set selected_cat = cat.name %}
+                                {% endif %}
+                            {% endfor %}
+                            <div class="cell small-12 medium-auto hide">
+<button class="blog-filter-toggle text-left" data-toggle="blog-categories" type="button">Category: <span class="selected">{{ t.blog_posts.span_selected_cat_theme_sw }}</span></button>
+<div class="dropdown-pane top bg-razzmatazz_pink no-border" data-dropdown="" data-v-offset="10" id="blog-categories">
+<ul class="menu vertical">
+<li>
+<a class="text-white" href="/blog">{{ t.blog_posts.a_all }}</a>
+</li>
+                                        {% for item in categories %}
+                                            <li>
+<a class="text-white" href="{{ item.url }}">{{ t.blog_posts.a_item_name }}</a>
+</li>
+                                        {% endfor %}
+                                    </ul>
+</div>
+</div>
+                        {% endif %}
+                        {% if archive %}
+                            {% set selected_archive = 'All' %}
+                            {% for item in archive %}
+                                {% if item.url == global.current_url %}
+                                    {% set selected_archive = item.name %}
+                                {% endif %}
+                            {% endfor %}
+                            <div class="cell small-12 medium-auto{{ categories ? ' medium-text-right' : '' }}">
+<button class="blog-filter-toggle" data-toggle="blog-archive" type="button">Date: <span class="selected">{{ t.blog_posts.span_selected_archive_theme_sw }}</span></button>
+<div class="dropdown-pane top bg-dark_blue no-border" data-dropdown="" data-v-offset="10" id="blog-archive">
+<ul class="menu vertical">
+<li>
+<a class="text-white" href="/blog">{{ t.blog_posts.a_all_2 }}</a>
+</li>
+                                        {% for item in archive %}
+                                            <li>
+<a class="text-white" href="{{ item.url }}">{{ t.blog_posts.a_item_name_2 }}</a>
+</li>
+                                        {% endfor %}
+                                    </ul>
+</div>
+</div>
+                        {% endif %}
+                    </div>
+</div>
+<div class="blog-post-container all">
+<div class="grid-x grid-margin-x small-up-1 medium-up-2 large-up-3" data-equalize-on="medium" data-equalizer="">
+                        {% for post in posts %}
+                            <div class="cell">
+<article class="blog-post bg-white pos-rel" data-equalizer-watchs="">
+<a class="blog-post-image-container image-container mod-rel mod-44" data-fit="{{ gts.image_container_blog_thumbnail ? '1' : '0' }}" href="{{ post.url }}">{{ t.blog_posts.a_html_image_post_thumbnail }}<span class="blog-post-cat">{{ t.blog_posts.span_post_category_name }}</span><time class="blog-post-date" datetime="{{ post.date|date('Y-m-d') }}">{{ post.date|date('jS F Y') }}</time></a>
+<div class="blog-post-bottom padding-2 padding-top-3">
+<h3 class="text-size-18 text-weight-demibold margin-bottom">{{ t.blog_posts.h3_post_title }}</h3>
+<p class="text-dark_blue text-size-standard margin-bottom-3">{{ t.blog_posts.p_post_excerpt_striptags_truncate }}</p>
+<p class="no-margin">
+<a class="blog-read-link text-dark_green text-size-small text-weight-bold" href="{{ post.url }}">{{ t.blog_posts.a_read_more }}</a>
+</p>
+</div>
+</article>
+</div>
+                        {% endfor %}
+                    </div>
+</div>
+                {# Render page links #}
+                {% if total_pages &gt; 1 %}
+                    <nav class="text-center">
+<ul class="pagination">
+                            {% if current_page &gt; 1 %}
+                                <li class="pagination-previous">
+<a href="{{ blog_page_url(current_page - 1) }}">{{ t.blog_posts.a_theme_sw_icon_down }}</a>
+</li>
+                            {% else %}
+                                <li class="pagination-previous disabled">{{ t.blog_posts.li_theme_sw_icon_down }}</li>
+                            {% endif %}
+                            {% for page in 1..total_pages %}
+                                {% if page == current_page %}
+                                    <li class="current">{{ t.blog_posts.li_page }}</li>
+                                {% elseif (page &lt; low_show) or (page &gt; high_show) %}
+                                    <li class="hide">
+<a href="{{ blog_page_url(page) }}">{{ t.blog_posts.a_page }}</a>
+</li>
+                                {% else %}
+                                    <li>
+<a href="{{ blog_page_url(page) }}">{{ t.blog_posts.a_page_2 }}</a>
+</li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if current_page &lt; total_pages %}
+                                <li class="pagination-next">
+<a href="{{ blog_page_url(current_page + 1) }}">{{ t.blog_posts.a_theme_sw_icon_down_2 }}</a>
+</li>
+                            {% else %}
+                                <li class="pagination-next disabled">{{ t.blog_posts.li_theme_sw_icon_down_2 }}</li>
+                            {% endif %}
+                        </ul>
+</nav>
+                {% endif %}
+            </div>
+</section>
+<section class="blog-posts-cta bg-woodsmoke_black text-white">
+<div class="grid-container full">
+<div class="grid-x grid-margin-x inner">
+<div class="large-6">
+<!-- 					<div class="post-cta-image" data-bg="{{ html.lazy_bg('images/post_cta.jpg, images/post_cta.jpg') }}"></div> -->
+					        {{ html.image('images/images/post_cta.jpg', '', 'content-image post-cta-image', '', true, false, 'images/post_cta.jpg, images/post_cta.jpg') }}
+				</div>
+<div class="large-6 post-cta-content">
+<div class="post-cta-content-inner">
+<h2>{{ t.blog_posts_cta.h2_start_your_14_day }}</h2>
+<p class="heading-image-text margin-bottom-2">{{ t.blog_posts_cta.p_see_why_shopwired_is }}</p>
+						{# input group sign up form #}
+						<form action="https://admin.myshopwired.uk/create?referrer={{ global.referrer }}" method="post">
+<div class="input-group">
+<label class="hide">Your email address</label>
+<input class="input-group-field mod-large bg-white" name="email_address" placeholder="Your email address" type="text"/>
+<div class="input-group-button">
+<button class="button mod-razzmatazz_pink" type="submit"><span class="text-size-large">{{ t.blog_posts_cta.span_get_started }}</span></button>
+</div>
+</div>
+</form>
+<p class="text-small">
+<strong>{{ t.blog_posts_cta.strong_no_obligation_no_credit }}</strong>
+</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+{% endblock %}
+
+
+{% block stylesheets %}
+    <style>
+        @media only screen and (max-width: 39.9375em) {
+            button[data-toggle="blog-categories"] {
+                margin-bottom: 20px;
+            }
+        }
+        .blog-search .button {
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        .blog-search .button i {
+            font-size:  25px;
+        }
+        @media screen and (min-width: 40em) {
+            .blog-search .input-group-field {
+                font-size:  16px;
+            }
+            .blog-search .button i {
+                font-size:  45px;
+            }
+            .blog-search .input-group-field:first-child {
+                border-radius: 10px 0 0 10px;
+            }
+            .blog-search .input-group > :last-child.input-group-button > * {
+                border-radius: 0 10px 10px 0;
+            }
+        }
+
+        .blog-post {
+            margin-bottom: 50px;
+        }
+        .blog-post-image-container {
+            position: relative;
+            display: block;
+        }
+        .blog-post-cat,
+        .blog-post-date {
+            position: absolute;
+            color: white;
+            font-size: 12px;
+            padding: .75em 1.5em;
+            max-width: calc(100% - 60px);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .blog-post-cat {
+            background: #f10257;
+            left: 30px;
+            top: -10px;
+            text-transform: uppercase;
+        }
+        .blog-post-date {
+            background: #003041;
+            right: 30px;
+            bottom: -10px;
+        }
+        .blog-read-link {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+        }
+        .blog-filter-toggle {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .blog-filter-toggle .selected {
+            font-weight: 600;
+        }
+        .blog-filter-toggle i {
+            position: relative;
+            top: .125em;
+            margin-left: .5em;
+        }
+        ul.pagination a {
+            color: #374759;
+        }
+		
+		.slick-track {
+			display: flex !important;
+		}
+
+		.features-slider-item {
+			background-size: cover;
+			height: 240px !important;
+		}
+		
+		.category-slider-section .features-slider-item {
+			padding: 0 !important;
+		}
+		
+		.image-overlay {
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.7);
+			position: absolute;
+			z-index: 0;
+		}
+		.category-slider-section .features-slider-item .content {
+			z-index: 1;
+			position: absolute;
+			padding: 15px;
+			color: #fff !important;
+		}
+		
+		.content h2 {
+			height: initial !important;
+		}
+		
+		.slick-arrow {
+		margin: 0 !important;
+		padding: 0 !important;
+		}
+
+		.slick-arrow svg {
+			height: 30px;
+		}
+		
+		.features-slider-item img {
+			position: absolute;
+			object-fit: cover;
+			height: 100%;
+			width: 100%;
+		}
+		
+		.features-slider p {
+			font-size: 14px;
+			font-weight: 500;
+		}
+		
+		.blog-page .heading-large {
+			padding: 10px 10px 70px 10px;
+		}
+		
+		.breadcrumbs a {
+			color: #000 !important;
+			text-decoration: none !important;
+		}
+		.breadcrumbs {
+			margin-top: 0 !important;
+		}
+        @media only screen and (min-width: 64em) {
+            .blog-post-container .grid-x {
+                margin-left: -30px;
+                margin-right: -30px;
+            }
+            .blog-post-container .grid-x > .cell {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+    </style>
+    {{ parent() }}
+    {{ html.stylesheet(asset_url('css/vendor/slick.css')) }}
+    {{ html.stylesheet(asset_url('css/vendor/slick-theme.css')) }}
+{% endblock %}
+{% block scripts %}
+    {{ parent() }}
+    {{ html.script(asset_url('js/vendor/slick.min.js')) }}
+    <script>
+        $('[data-slick]').each(function() {
+            $(this).slick();
+        });
+    </script>
+{% endblock %}

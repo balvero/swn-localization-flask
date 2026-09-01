@@ -7,9 +7,17 @@
 	hx-target="#app-shell" hx-select="#app-shell" hx-swap="innerHTML show:window:top">
 	{% if pages %}
 	<div class="flex items-center justify-between px-3 py-2 text-xs bg-base-100 border-b border-base-200">
-		<span class="font-bold text-base-content/70 {{ 'invisible' if tab_base == '/completed' else '' }}">
+		{% if tab_base == '/completed' %}
+		<span class="font-bold text-base-content/70 flex gap-2">
+			{% for code, label in LANGS %}
+			<span title="{{ label }} published: {{ published_counts[code] }} out of {{ pages|length }}">{{ code|upper }} {{ published_counts[code] }}/{{ pages|length }}</span>
+			{% endfor %}
+		</span>
+		{% else %}
+		<span class="font-bold text-base-content/70">
 			{{ total_missing }} missing · {{ pages|length }} page{{ "s" if pages|length != 1 else "" }}
 		</span>
+		{% endif %}
 		<a class="text-base-content/50 hover:text-base-content underline cursor-pointer {{ 'invisible' if tab_base == '/completed' else '' }}"
 			href="{{ tab_base }}{{ '/' + active_slug if active_slug else '' }}?sort={{ 'name' if sort_by == 'missing' else 'missing' }}"
 			title="Change sidebar sort order">
