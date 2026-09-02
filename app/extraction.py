@@ -62,8 +62,11 @@ def section_name(el):
     return "page"
 
 
-def extract_html(raw_html):
+def extract_html(raw_html, glossary_terms=None):
     """Returns (keys: dict, template: str)."""
+    if glossary_terms is None:
+        glossary_terms = []
+        
     protected_html, comments = protect_twig_comments(raw_html)
     soup = BeautifulSoup(f"<div id='__extract_root__'>{protected_html}</div>", "lxml")
     root = soup.find(id="__extract_root__")
@@ -93,6 +96,9 @@ def extract_html(raw_html):
             text = re.sub(r"\s+", " ", text).strip()
 
             if len(text) < MIN_TEXT_LENGTH:
+                continue
+
+            if text.lower() in glossary_terms:
                 continue
 
             section = section_name(el)

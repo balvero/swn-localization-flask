@@ -9,7 +9,7 @@ from flask import Blueprint, request, render_template
 from ..auth import require_user
 from ..db import using_prod_db
 from ..extraction import extract_html
-from ..queries import commit_import
+from ..queries import commit_import, get_glossary_terms
 
 bp = Blueprint("ui_import", __name__)
 
@@ -29,7 +29,9 @@ def extract():
     if not raw_content.strip():
         return render_template("_import_form.html", review=None, result=None, error="Paste some source first.", raw_content=raw_content)
 
-    keys, template = extract_html(raw_content)
+    glossary = get_glossary_terms()
+    glossary_words = [t["en"].lower().strip() for t in glossary if t.get("en")]
+    keys, template = extract_html(raw_content, glossary_words)
     return render_template("_import_form.html", review={"keys": keys, "template": template}, result=None, error=None)
 
 

@@ -8,6 +8,7 @@ from flask import Blueprint, request, jsonify
 
 from ..auth import require_user
 from ..extraction import extract_html
+from ..queries import get_glossary_terms
 
 bp = Blueprint("extract", __name__)
 
@@ -23,6 +24,8 @@ def extract():
     if not raw_content or not raw_content.strip():
         return "Missing rawContent", 400
 
-    keys, template = extract_html(raw_content)
+    glossary = get_glossary_terms()
+    glossary_words = [t["en"].lower().strip() for t in glossary if t.get("en")]
+    keys, template = extract_html(raw_content, glossary_words)
 
     return jsonify({"keys": keys, "template": template, "keyCount": len(keys)})
